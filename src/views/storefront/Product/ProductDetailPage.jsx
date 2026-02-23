@@ -1,0 +1,190 @@
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+
+const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
+
+import CareTipsSection from '../../../components/storefront/sections/products/CareTipsSection';
+import QuantityController from '../../../components/storefront/elements/QuantityController';
+import { addToCartWithStockCheck } from '../../../api/cart';
+
+
+
+
+export default function ProductDetailPage() {
+  const params = useParams();
+  const [product, setProduct] = useState({});
+  const [images, setImages] = useState([]);
+
+  async function getProduct() {
+      try {            
+          const res = await axios.get (`${VITE_API_URL}/api/${VITE_API_PATH}/product/${params.id}`);
+
+          if (res.data.product) {
+              setProduct(res.data.product);
+              setImages([res.data.product.imageUrl, ...res.data.product.imagesUrl]);
+          } else {
+              setProduct({});
+          }
+      } catch (error) {
+          setProduct({}); 
+      }
+  }
+  
+
+  useEffect(() => {
+    getProduct();
+  }, []);
+
+
+  const Q = 5;
+/*
+{
+  "success": true,
+  "product": {
+    "category": "衣服3",
+    "content": "這是內容",
+    "description": "Sit down please 名設計師設計",
+    "id": "-L9tH8jxVb2Ka_DYPwng",
+    "imageUrl": "主圖網址",
+    "imagesUrl": [
+      "圖片網址一",
+      "圖片網址二",
+      "圖片網址三",
+      "圖片網址四",
+      "圖片網址五"
+    ],
+    "is_enabled": 1,
+    "num": 1,
+    "origin_price": 100,
+    "price": 600,
+    "title": "[賣]動物園造型衣服3",
+    "unit": "個"
+  }
+}
+*/
+
+
+
+
+  const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(1);
+  const [cartLoading, setCartLoading] = useState(false);
+
+  async function handleAddToCart() {
+    if (!product?.id) return;
+    setCartLoading(true);
+    try {
+      await addToCartWithStockCheck({
+        productId: product.id,
+        qty: quantity,
+        stock: product.stock ?? undefined,
+        unit: product.unit ?? '',
+      });
+    } finally {
+      setCartLoading(false);
+    }
+  }
+
+
+
+
+
+  return (
+    <div className="md:px-8">
+
+      {/* Product Section */}
+      <section className="pb-8 md:pt-8">
+
+        {/*產品圖片*/}
+        <div className="w-full max-h-[600px] flex flex-col gap-4
+                        md:flex-row-reverse ">
+
+          <div className="w-full  bg-placeholder rounded-md overflow-hidden">
+            <img src={images[selectedImage]} alt={`Product Image ${selectedImage + 1}`} 
+                 className="w-full h-full object-cover" />
+          </div>
+          
+          <div className="flex justify-between gap-2 
+                          md:flex-col md:w-1/4">
+              {images.map((img, index) => (
+                <button onClick={() => setSelectedImage(index)}
+                        className={`w-1/4 aspect-[4/3] rounded-md overflow-hidden bg-placeholder hover:opacity-75 
+                                    md:w-full 
+                                    ${selectedImage === index ? 'opacity-100' : 'opacity-50'}`}>
+                  <img src={img} alt={`Product Image ${index + 1}`} 
+                       className="w-full h-full object-cover" />
+                </button>
+              ))}
+          </div>
+
+        </div>
+      </section>
+
+      <section className="w-full bg-panel-50 p-8 rounded-md flex flex-col justify-between md:flex-row  gap-4">
+        <div className="">
+          <h1 className="text-xl md:text-2xl tracking-normal"> {product.title} </h1>
+          <div className="space-y-4 hidden md:block">
+            <p className="text-secondary">{product.sub_title} </p>
+            <div className="w-fit bg-panel rounded-md px-4 py-1 text-xs font-bold">
+              {product.category}
+            </div>
+          </div>
+        </div>
+
+        <div className="min-w-[220px] flex flex-col gap-4">
+          <div className="flex-row-between gap-2 ">
+            <div className="h-full space-y-4 ">
+              <p className="text-secondary block md:hidden">{product.sub_title} </p>
+              <div className="bg-panel rounded-md px-3 py-1 text-xs font-bold block md:hidden">
+                {product.category}
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 text-right">
+              <p className="text-sm md:text-base line-through">$ {product.origin_price}</p>
+              <p className="text-xl font-bold text-primary">$ {product.price}</p>
+            </div>
+          </div>
+          <div className="flex-row--center justify-between md:justify-end gap-4">
+            {product.category === '精品' ? (
+              <p className="font-bold">唯一個體</p>
+            ) : (
+              <QuantityController
+                value={quantity}
+                min={1}
+                max={product.stock}
+                unit={product.unit}
+                onChange={setQuantity}
+              />
+            )}
+            <button
+              type="button"
+              className="btn-primary"
+              disabled={cartLoading || !product?.id}
+              onClick={handleAddToCart}
+            >
+              {cartLoading ? '加入中…' : '加入購物車'}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="max-w-screen-md mx-auto flex flex-col gap-8 py-12">
+          <div className="p-8">
+          <p className="text-sm text-muted">(未來會升級內容，有簡單的文字段落，但這邊先不處理)</p>
+          {product.description}
+          </div>
+          <CareTipsSection title="養護重點" care={product.care} />
+
+        </div>
+
+
+
+
+      </section>
+
+    </div>
+  );
+};
+

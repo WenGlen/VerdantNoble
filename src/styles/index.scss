@@ -1,0 +1,536 @@
+@use 'GlenTools' as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+
+:root {
+  // 前台基本色
+  
+  --color-bg: hsl(35, 45%, 97%);
+  --color-bg-75: color-mix(in srgb, var(--color-bg) 75%, transparent);
+  --color-bg-50: color-mix(in srgb, var(--color-bg) 50%, transparent);
+  --color-bg-25: color-mix(in srgb, var(--color-bg) 25%, transparent);
+
+  --color-primary: hsl(90, 95%, 35%);
+  --color-primary-hover: hsl(90, 95%, 25%);
+  --color-primary-75: color-mix(in srgb, var(--color-primary) 75%, transparent);
+  --color-primary-50: color-mix(in srgb, var(--color-primary) 50%, transparent);
+  --color-primary-25: color-mix(in srgb, var(--color-primary) 25%, transparent);
+
+  --color-secondary: hsl(70, 50%, 40%);
+  --color-secondary-hover: hsl(70, 50%, 30%);
+  --color-secondary-75: color-mix(in srgb, var(--color-secondary) 75%, transparent);
+  --color-secondary-50: color-mix(in srgb, var(--color-secondary) 50%, transparent);
+  --color-secondary-25: color-mix(in srgb, var(--color-secondary) 25%, transparent);
+
+  --color-card: hsl(70, 35%, 85%);
+  --color-card-hover: hsl(70, 40%, 70%);
+  --color-card-75: color-mix(in srgb, var(--color-card) 75%, transparent);
+  --color-card-50: color-mix(in srgb, var(--color-card) 50%, transparent);
+  --color-card-25: color-mix(in srgb, var(--color-card) 25%, transparent);
+
+  --color-panel: hsl(70, 20%,80%);
+  --color-panel-muted: hsl(70, 30%, 75%);
+  --color-panel-hover: hsl(70, 30%, 70%);
+  --color-panel-75: color-mix(in srgb, var(--color-panel) 75%, transparent);
+  --color-panel-50: color-mix(in srgb, var(--color-panel) 50%, transparent);
+  --color-panel-25: color-mix(in srgb, var(--color-panel) 25%, transparent);
+
+  --color-border: hsl(130, 30%, 60%);
+  --color-border-75: color-mix(in srgb, var(--color-border) 75%, transparent);
+  --color-border-50: color-mix(in srgb, var(--color-border) 50%, transparent);
+  --color-border-25: color-mix(in srgb, var(--color-border) 25%, transparent);
+  
+  --color-overlay: hsl(70, 40%, 20%);
+  --color-overlay-75: color-mix(in srgb, var(--color-overlay) 75%, transparent);
+  --color-overlay-50: color-mix(in srgb, var(--color-overlay) 50%, transparent);
+  --color-overlay-25: color-mix(in srgb, var(--color-overlay) 25%, transparent);
+
+   
+  // 按鈕 
+  --color-btn: hsl(205, 50%, 30%);
+  --color-btn-text: hsl(205, 20%, 90%);
+  --color-btn-hover: hsl(205, 60%, 35%);
+  --color-btn-focus: hsl(195, 70%, 40%);
+
+  --color-btn-sub: hsl(205, 30%, 80%);
+  --color-btn-sub-text: hsl(200, 20%, 30%);
+  --color-btn-sub-hover: hsl(200, 35%, 70%);
+  --color-btn-sub-focus: hsl(200, 35%, 40%);
+  --color-btn-sub-focus-mode: hsl(200, 35%, 50%);
+  --color-btn-sub-focus-mode-text: hsl(200, 20%, 95%);
+
+  --color-btn-emphasized: hsl(35, 80%, 32%);
+  --color-btn-emphasized-text: hsl(35, 20%, 90%);
+  --color-btn-emphasized-hover: hsl(40, 100%, 40%);
+  --color-btn-emphasized-focus: hsl(35, 100%, 40%);
+
+  // 文字顏色
+  --color-text-default: hsl(80, 50%, 20%);
+  --color-text-invert: hsl(0, 0%, 100%);
+  --color-text-muted: hsl(80, 15%, 50%);
+  --color-text-sub: hsl(200, 10%, 60%);
+  --color-text-emphasized: hsl(100, 50%, 30%);
+  --color-text-placeholder: hsl(80, 20%, 50%);
+
+  --color-text-primary: hsl(40, 60%, 60%);
+  --color-text-primary-muted: hsl(40, 60%, 60%);
+  --color-text-primary-strong: hsl(40, 60%, 60%);
+  --color-text-primary-hover: hsl(40, 60%, 60%);
+  --color-text-primary-25: color-mix(in srgb, var(--color-text-primary) 25%, transparent);
+  --color-text-primary-50: color-mix(in srgb, var(--color-text-primary) 50%, transparent);
+  --color-text-primary-75: color-mix(in srgb, var(--color-text-primary) 75%, transparent);
+
+  --color-text-error: hsl(20, 60%, 40%);
+  --color-text-success: hsl(80, 100%, 70%);
+
+  --color-test: hsl(340, 40%, 70%);
+  --color-test2: hsl(150, 40%, 70%);
+  --color-placeholder: hsl(100, 30%, 80%);
+
+
+  // 後台基本色
+  --color-admin-bg: hsl(200, 20%, 95%);
+  --color-admin-bg-75: color-mix(in srgb, var(--color-admin-bg) 75%, transparent);
+  --color-admin-bg-50: color-mix(in srgb, var(--color-admin-bg) 50%, transparent);
+  --color-admin-bg-25: color-mix(in srgb, var(--color-admin-bg) 25%, transparent);
+
+  --color-admin-card: hsl(200, 30%, 80%);
+  --color-admin-card-hover: hsl(200, 30%, 70%);
+  --color-admin-card-75: color-mix(in srgb, var(--color-admin-card) 75%, transparent);
+  --color-admin-card-50: color-mix(in srgb, var(--color-admin-card) 50%, transparent);
+  --color-admin-card-25: color-mix(in srgb, var(--color-admin-card) 25%, transparent);
+
+  --color-admin-card-focus: hsl(200, 30%, 90%);
+  --color-admin-card-edit: hsl(90, 30%, 90%);
+
+  --color-admin-text: hsl(200, 20%, 30%);
+  --color-admin-text-hover: hsl(200, 20%, 40%);
+  --color-admin-text-invert: hsl(200, 20%, 90%);
+  --color-admin-text-muted: hsl(200, 20%, 60%);
+  --color-admin-text-sub: hsl(200, 20%, 60%);
+  --color-admin-text-emphasized: hsl(200, 20%, 70%);
+  --color-admin-text-placeholder: hsl(200, 20%, 80%);
+}
+
+//==========================================
+// Admin Styles
+//==========================================
+
+.admin {
+  color: var(--color-admin-text);
+  background-color: var(--color-admin-bg);
+  .btn-nav {
+    background-color: var(--color-admin-card-50);
+    color: var(--color-admin-text);
+    &:hover {
+      background-color: var(--color-admin-card-75);
+      color: var(--color-admin-text-hover);
+    }
+  }
+}
+
+//==========================================
+// base Styles
+//==========================================
+
+body {
+  background-color: var(--color-bg);
+  box-sizing: border-box;
+  color: var(--color-text-default);
+  font-size: 16px;
+  background-color: hsl(70, 30%, 90%);
+  background-image: url("https://www.transparenttextures.com/patterns/fresh-snow.png");
+}
+
+section {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+
+}
+
+h1 {
+  //color: var(--color-secondary);
+  font-size: 64px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  font-family: "Noto Serif TC", serif;
+  margin-bottom: 8px;
+
+}
+
+h2 {
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  font-family: "Noto Serif TC", serif;
+  margin-bottom: 8px;
+}
+
+h3{
+  font-size: 24px;
+  font-weight: 500;
+  font-family: "Noto Serif TC", serif;
+  margin-bottom: 8px;
+}
+
+a{
+  color: var(--color-secondary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  &:hover {
+    color: var(--color-secondary-hover);
+  }
+}
+
+input,textarea{
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  &:disabled {
+    cursor: default;
+    background: var(--color-bg-25);
+  }
+  
+  &::placeholder {
+    color: var(--color-text-placeholder);
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: 2px solid var(--color-secondary);
+  }
+
+  &[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid var(--color-border);
+    display: grid;
+    place-content: center;
+    &:checked {
+      background: var(--color-secondary);
+      border-color: var(--color-secondary);
+      color: var(--color-text-invert);
+      &::after {
+        content: "";
+        width: 4px;
+        height: 8px;
+        border: solid currentColor;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        margin-bottom: 2px;
+      }
+    }
+  }
+}
+
+.form-label{
+  width: 80px;
+  text-align: right;
+
+  
+  @media (max-width: 768px) {
+    text-align: left;
+
+  }
+}
+
+
+select {
+  padding: 8px 16px;
+  color: var(--color-text-default);
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  &:focus,
+  &:focus-visible {
+    outline: 2px solid var(--color-secondary);
+  }
+}
+
+.text-NotoSerifTC{
+  font-family: "Noto Serif TC", serif;
+}
+
+.banner{
+  p{
+    color: var(--color-text-emphasized);
+    font-family: "Noto Serif TC", serif;
+    line-height: 1.5;
+  }
+}
+  
+button{
+  padding: 6px 24px;
+  border-radius: 4px;
+  width: fit-content;
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+
+.btn {
+
+  &-primary {
+    background: var(--color-primary);
+    color: var(--color-text-invert);
+    &:hover {
+      background: var(--color-primary-hover);
+    }
+    &:disabled {
+      background: var(--color-panel);
+      color: var(--color-text-default);
+      cursor: default;
+    }
+  }
+
+  &-secondary {
+    background: var(--color-secondary);
+    color: var(--color-text-invert);
+    &:hover {
+      background: var(--color-secondary-hover);
+    }
+  }
+
+  &-muted {
+    background: var(--color-text-muted);
+    color: var(--color-text-invert);
+    &:hover {
+      background: var(--color-secondary);
+    }
+  }
+
+  &-panel {
+    background: var(--color-panel);
+    color: var(--color-text-default);
+    &:hover {
+      background: var(--color-panel-hover);
+      color: var(--color-text-default);
+    }
+    &.active {
+      background: var(--color-panel-hover);
+    }
+  }
+
+
+
+  &-icon {
+    padding: 0px;
+    width: fit-content;
+    height: fit-content;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.8;
+  
+    &:hover {
+      transition: opacity 0.2s;
+      opacity: 1;
+    }
+  }
+
+  &-pagination {
+    padding: 2px 10px;
+    background: transparent;
+    
+    &:hover {
+      background: var(--color-secondary-25);
+    }
+    &.active {
+      background: var(--color-secondary);
+      color: var(--color-text-invert);
+    }
+  }
+
+  &-stepper{
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 0px;
+    background: var(--color-panel-25);
+    &:hover {
+      background: var(--color-card-hover);
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      &:hover {
+        background: var(--color-panel-25);
+      }
+    }
+  }
+
+
+  &-tag{
+    padding: 4px 16px;
+    background: var(--color-panel-75);
+    color: var(--color-text-default);
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+
+    &:hover {
+      background: var(--color-secondary-75);
+      color: var(--color-text-invert);
+    }
+    &.active {
+      background: var(--color-secondary);
+      color: var(--color-text-invert);
+    }
+  }
+
+  &-select {
+    background: var(--color-panel-75);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  
+    &:hover {
+      background: var(--color-secondary-50);
+      color: var(--color-text-invert);
+    }
+  
+    &.active {
+      background: var(--color-secondary);
+      color: var(--color-text-invert);
+    }
+
+    &:disabled {
+      cursor: default;
+      color: var(--color-text-muted);
+      opacity: 0.75;
+      transform: none;
+
+      &:hover {
+        background: var(--color-panel-75);
+      }
+    }
+
+    &-test {
+      padding: 2px 6px;
+      background: #666666;
+      color: #fff;
+      &:hover {
+        background: #888888;
+      }
+    }
+
+  }
+
+  &-segmented {
+    padding: 8px 16px;
+    background: var(--color-panel-75);
+    color: var(--color-text-default);
+    border-radius: 0px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  
+    &:hover {
+      background: var(--color-secondary-50);
+      color: var(--color-text-invert);
+      @media (max-width: 768px) {
+        background: var(--color-secondary);
+        color: var(--color-text-invert);
+      }
+    }
+  
+    &.active {
+      background: var(--color-secondary);
+      color: var(--color-text-invert);
+    }
+
+    &:disabled {
+      cursor: default;
+      color: var(--color-text-muted);
+      opacity: 0.5;
+      transform: none;
+
+      &:hover {
+        background: var(--color-panel-75);
+      }
+    }
+  }
+
+  &-steps {
+    border-radius: 8px;
+
+    &:hover {
+      color: var(--color-secondary);
+    }
+    
+    &:disabled {
+      cursor: default;
+      color: var(--color-text-muted);
+      opacity: 1;
+      transform: none;
+    }
+
+    &.active {
+      padding: 4px 16px;
+      background: var(--color-secondary);
+      color: var(--color-text-invert);
+    }
+  }
+
+  &-link {
+    text-decoration: none;
+    color: var(--color-text-default);
+    &:hover {
+      color: var(--color-secondary);
+    }
+    &.active {
+      color: var(--color-primary);
+      text-decoration: underline;
+      text-underline-offset: 6px;
+    }
+  }
+}
+
+
+.link-card{
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+
+
+//==========================================
+// Header Styles
+//==========================================
+
+
+.header {
+  a{
+    color: var(--color-text-default);
+    text-decoration: none;
+  }
+  .nav {
+    font-weight: 500;
+    letter-spacing: 2px;
+    font-family: "Noto Serif TC", serif;
+    color: var(--color-text-default);
+    .nav-item{
+      &:hover {
+        color: var(--color-secondary);
+      }
+      &.active {
+        color: var(--color-secondary);
+        text-decoration: underline;
+        text-underline-offset: 6px;
+      }
+    }
+  }
+
+}
+
+

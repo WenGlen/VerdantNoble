@@ -1,10 +1,16 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import './styles/index.scss'
+
+import { createHashRouter, RouterProvider } from 'react-router-dom'
+import getRoutes from './routes/index.jsx'
+
+//const basename = import.meta.env.PROD ? '/Onlinestore-frontend' : ''
+
+const router = createHashRouter(getRoutes())
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>,
 )
