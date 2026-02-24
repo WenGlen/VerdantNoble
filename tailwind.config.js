@@ -60,8 +60,23 @@ export default {
         test: 'var(--color-test)',
         test2: 'var(--color-test2)',
         placeholder: 'var(--color-placeholder)',
+        error: 'var(--color-text-error)',
 
         admin: {
+          primary: {
+            DEFAULT: 'var(--color-admin-primary)',
+            hover: 'var(--color-admin-primary-hover)',
+            '75': 'var(--color-admin-primary-75)',
+            '50': 'var(--color-admin-primary-50)',
+            '25': 'var(--color-admin-primary-25)',
+          },
+          secondary: {
+            DEFAULT: 'var(--color-admin-secondary)',
+            hover: 'var(--color-admin-secondary-hover)',
+            '75': 'var(--color-admin-secondary-75)',
+            '50': 'var(--color-admin-secondary-50)',
+            '25': 'var(--color-admin-secondary-25)',
+          },
           background: {
             DEFAULT: 'var(--color-admin-bg)',
             '75': 'var(--color-admin-bg-75)',
@@ -76,7 +91,16 @@ export default {
             '25': 'var(--color-admin-card-25)',
             focus: 'var(--color-admin-card-focus)',
             edit: 'var(--color-admin-card-edit)',
-          }
+          },
+          text: {
+            DEFAULT: 'var(--color-admin-text)',
+            hover: 'var(--color-admin-text-hover)',
+            invert: 'var(--color-admin-text-invert)',
+            muted: 'var(--color-admin-text-muted)',
+            sub: 'var(--color-admin-text-sub)',
+            emphasized: 'var(--color-admin-text-emphasized)',
+            placeholder: 'var(--color-admin-text-placeholder)',
+          },
         },
       },
       textColor: {
@@ -130,7 +154,8 @@ export default {
   plugins: [
     // 自訂 mobile 變體：僅在 768px 以下套用（等同 max-width: 768px） 之後再看怎麼調整
     function ({ addVariant }) {
-      addVariant('mobile', '@media (max-width: 768px)');
+      addVariant('mobile', '@media (max-width: 768px) { & }');
+      addVariant('tablet', '@media (max-width: 1280px) { & }');
     },
   ],
 }

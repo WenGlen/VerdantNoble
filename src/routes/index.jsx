@@ -1,10 +1,13 @@
 import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import DocumentTitle from './DocumentTitle';
+
+import MainLayout from '../views/storefront/MainLayout.jsx';
+
 import HomePage from '../views/storefront/HomePage.jsx';
 
-import AdminHomePage from '../views/admin/AdminHomePage.jsx';
-import ProductsManagement from '../views/admin/products/ProductsManagement.jsx';
+
 import ProductsPage from '../views/storefront/Product/ProductsPage.jsx';
 import ProductDetailPage from '../views/storefront/Product/ProductDetailPage.jsx';
 import ArticlesPage from '../views/storefront/Article/ArticlesPage.jsx';
@@ -26,13 +29,17 @@ import APITestPage from '../views/storefront/staticPages/APITestPage.jsx';
 // 後台頁面
 import AdminLoginPage from '../views/admin/AdminLoginPage.jsx';
 
-import DocumentTitle from './DocumentTitle';
+import AdminLayout from '../views/admin/AdminLayout.jsx';
 
-import MainLayout from '../views/storefront/MainLayout.jsx';
+import AdminHomePage from '../views/admin/AdminHomePage.jsx';
+
+import ProductsManagement from '../views/admin/products/ProductsManagement.jsx';
+import OrdersManagement from '../views/admin/orders/OrdersManagement.jsx';
+
 
 // 頁面標題集中管理（顯示為：title | 綠蕨飾）
 
-
+// 前台頁面
 const storefrontPages = {
 
     headerNav:[
@@ -61,21 +68,6 @@ const storefrontPages = {
     ],
 };
 
-const adminPages =[
-    { path: "ProductsManagement", element: <ProductsManagement />, title: '商品管理' },
-];
-
-
-function RootLayout() {
-  return (
-    <Fragment>
-      <DocumentTitle />
-      <Outlet />
-    </Fragment>
-  );
-}
-
-
 const headerNavItems = storefrontPages.headerNav.map((item) => ({
     label: item.title,
     path: "/" + item.path  // 導航連結需絕對路徑
@@ -86,12 +78,26 @@ const footerNavItems = storefrontPages.footerNav.map((item) => ({
     path: "/" + item.path,  // 導航連結需絕對路徑
 }));
 
+// 後台頁面
+const adminPages =[
+    { path: "ProductsManagement", element: <ProductsManagement />, title: '商品管理' },
+    { path: "OrdersManagement", element: <OrdersManagement />, title: '訂單管理' },
+];
 
 const adminPagesItems = adminPages.map((item) => ({
     label: item.title,
     path: "/admin/" + item.path,  // 導航連結需絕對路徑
 }));
 
+
+function RootLayout() {
+    return (
+      <Fragment>
+        <DocumentTitle />
+        <Outlet />
+      </Fragment>
+    );
+  }
 
 export default function routes() {
     return [

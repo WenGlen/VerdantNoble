@@ -1,7 +1,9 @@
 import { Outlet, Link , NavLink , useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Toast from '../../components/storefront/elements/Toast';
-import { getCart, EVENT_CART_UPDATED, EVENT_SHOW_TOAST } from '../../api/cart';
+import { useDispatch } from "react-redux";
+import StorefrontToast from '../../components/storefront/elements/StorefrontToast';
+import { getCart, EVENT_CART_UPDATED } from '../../api/cart';
+import { fetchProducts } from '../../slices/productsSlice';
 
 import userIcon from '../../img/user.png';
 import cartIcon from '../../img/cart.png';
@@ -14,6 +16,7 @@ export default function MainLayout({
     footerNavItems ,
 
 }) {
+    const dispatch = useDispatch();
     {/* 換頁時回到頂部 */}
     const location = useLocation();
 
@@ -22,9 +25,7 @@ export default function MainLayout({
     }, [location.pathname]);
 
 
-    {/* 吐司彈窗：有值時才顯示，結束後由 Toast 的 onClose 清空 */}
-    const [toastMessage, setToastMessage] = useState(null);
-
+    {/* 吐司彈窗：由 Redux storefrontToast 控管 */}
     const [cartCount, setCartCount] = useState(0);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -57,16 +58,15 @@ export default function MainLayout({
 
     useEffect(() => { fetchCart(); }, []);
 
+    // 進站時預載產品列表（供首頁、商品頁使用）
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch]);
+
     useEffect(() => {
         const onCartUpdated = () => fetchCart();
         window.addEventListener(EVENT_CART_UPDATED, onCartUpdated);
         return () => window.removeEventListener(EVENT_CART_UPDATED, onCartUpdated);
-    }, []);
-
-    useEffect(() => {
-        const onShowToast = (e) => setToastMessage(e.detail?.message ?? '');
-        window.addEventListener(EVENT_SHOW_TOAST, onShowToast);
-        return () => window.removeEventListener(EVENT_SHOW_TOAST, onShowToast);
     }, []);
 
     // 從手機版切回桌機版時關閉手機選單（Tailwind md = 768px）
@@ -81,11 +81,14 @@ export default function MainLayout({
 
     return (
         <div className="min-h-screen flex flex-col w-full" >
+            {/* 測試用 
             <div className="fixed bottom-0 left-0 z-50 text-[8px] text-white p-2 bg-black/50 rounded-tr-md  flex flex-row-between-center gap-2">
                 <p>測試用</p>
                 <p>isLoggedIn：{isLoggedIn ? 'true' : 'false'}</p>
                 <button className="px-2 py-0 bg-black/50 rounded-md text-2xs" onClick={() => setIsLoggedIn(!isLoggedIn)}>{isLoggedIn ? '登出' : '登入'}</button>
             </div>
+            */}
+
             <header className="header fixed top-0 left-0 right-0 z-50 w-full" >
                 {/* 桌面版選單 */}
                 <div className="relative w-full h-16 backdrop-blur-sm bg-background-50 border-b border-border-25 
@@ -127,15 +130,10 @@ export default function MainLayout({
                         </div>
                     </div>
 
-                    {/* 吐司彈窗：由各頁透過 showToast 事件顯示 */}
-                    {toastMessage != null && (
-                        <div className="absolute -bottom-[120px] right-4 z-50">
-                            <Toast
-                                message={toastMessage}
-                                onClose={() => setToastMessage(null)}
-                            />
-                        </div>
-                    )}
+                    {/* 吐司彈窗：由 Redux storefrontToast 顯示 */}
+                    <div className="absolute -bottom-[120px] right-4 z-50">
+                        <StorefrontToast />
+                    </div>
 
                 </div>
                 
@@ -162,14 +160,9 @@ export default function MainLayout({
                         </div>
                     </button>
 
-                    {toastMessage != null && (
-                        <div className="fixed top-0 left-4 z-50">
-                            <Toast
-                                message={toastMessage}
-                                onClose={() => setToastMessage(null)}
-                            />
-                        </div>
-                    )}
+                    <div className="fixed top-0 left-4 z-50">
+                        <StorefrontToast />
+                    </div>
 
                 </div>
 

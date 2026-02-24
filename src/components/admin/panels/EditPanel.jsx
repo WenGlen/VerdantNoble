@@ -70,13 +70,11 @@ export default function EditPanel({
         }
     }
 
-    const panelBg = mod === "add" ? "bg-amber-100" : mod === "update" ? "bg-sky-100" : "";
-    const frameBg = mod === "update" ? "bg-sky-200 border border-slate-200" : mod === "add" ? "bg-amber-200" : "";
     const btnLight = "mx-1 rounded px-2 py-1 font-semibold cursor-pointer bg-slate-200 text-slate-800 border-none hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:font-normal disabled:hover:bg-slate-200";
     const inputBase = "w-full py-2 px-3 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-200";
 
     return (
-        <div className="h-screen w-[400px] flex-col-between gap-2 overflow-x-auto p-4 bg-admin-card-edit">
+        <div className="h-screen w-[400px] flex-col-between gap-2 overflow-x-auto p-4 bg-admin-card-edit tablet:rounded-md">
             <div className="h-full w-full flex flex-col gap-4">
                 <div className="flex flex-col gap-4 justify-between">
                     <div className="flex flex-col gap-2 max-[1080px]:w-full">

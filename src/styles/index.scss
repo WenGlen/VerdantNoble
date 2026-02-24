@@ -95,6 +95,19 @@
 
 
   // 後台基本色
+
+  --color-admin-primary: hsl(200, 60%, 30%);
+  --color-admin-primary-hover: hsl(200, 60%, 40%);
+  --color-admin-primary-75: color-mix(in srgb, var(--color-admin-primary) 75%, transparent);
+  --color-admin-primary-50: color-mix(in srgb, var(--color-admin-primary) 50%, transparent);
+  --color-admin-primary-25: color-mix(in srgb, var(--color-admin-primary) 25%, transparent);
+
+  --color-admin-secondary: hsl(200, 30%, 80%);
+  --color-admin-secondary-hover: hsl(200, 30%, 70%);
+  --color-admin-secondary-75: color-mix(in srgb, var(--color-admin-secondary) 75%, transparent);
+  --color-admin-secondary-50: color-mix(in srgb, var(--color-admin-secondary) 50%, transparent);
+  --color-admin-secondary-25: color-mix(in srgb, var(--color-admin-secondary) 25%, transparent);
+
   --color-admin-bg: hsl(200, 20%, 95%);
   --color-admin-bg-75: color-mix(in srgb, var(--color-admin-bg) 75%, transparent);
   --color-admin-bg-50: color-mix(in srgb, var(--color-admin-bg) 50%, transparent);
@@ -126,14 +139,54 @@
   color: var(--color-admin-text);
   background-color: var(--color-admin-bg);
   .btn-nav {
-    background-color: var(--color-admin-card-50);
     color: var(--color-admin-text);
     &:hover {
-      background-color: var(--color-admin-card-75);
       color: var(--color-admin-text-hover);
     }
   }
+
+  .RWD-overlay{
+    @media (max-width: 1280px) {
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+
+    }
+    .RWD-container{
+
+        @media (max-width: 1280px) {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            width: 100vw;
+            height: 100vh;
+            overflow-y: auto;
+            }
+        .RWD-content{
+
+            @media (max-width: 1280px) {
+                padding: 24px 0;
+                min-height: 100vh;
+                width: 100%;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }  
+  }
 }
+
+
 
 //==========================================
 // base Styles

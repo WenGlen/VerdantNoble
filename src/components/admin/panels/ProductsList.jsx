@@ -157,11 +157,11 @@ export default function ProductsList({
                 <div className="flex justify-center items-center gap-8 mt-4 pt-3 border-t border-slate-200">
                     <button
                         type="button"
-                        className="rounded px-3 py-1.5 bg-slate-200 text-slate-800 text-sm border-none cursor-pointer hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="rotate-180 rounded px-3 py-1.5 bg-slate-200 text-slate-800 text-sm border-none cursor-pointer hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={goToPreviousPage}
                         disabled={currentPage === 1}
                     >
-                        ◄
+                        ►
                     </button>
                     <div className="flex gap-2 items-center">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (

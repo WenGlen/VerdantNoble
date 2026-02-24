@@ -1,6 +1,6 @@
 export default function FoucsPanel({ focus, setFocus, editProduct, setMod }) {
     return (
-        <div className="h-screen bg-admin-card ">
+        <div className="h-screen ">
             {!focus.id ? (
                 <div className="h-screen w-[400px] flex-col-center  gap-2 overflow-x-auto p-4 bg-admin-card-focus">
                     <p className="text-center text-sm text-slate-600">
@@ -10,7 +10,7 @@ export default function FoucsPanel({ focus, setFocus, editProduct, setMod }) {
                     </p>
                 </div>
             ) : (
-                <div className="h-screen w-[400px] flex-col-between gap-2 overflow-x-auto p-4 bg-admin-card-focus">
+                <div className="h-screen w-[400px] flex-col-between gap-2 overflow-x-auto p-4 bg-admin-card-focus tablet:rounded-md">
                     <div className="h-fit w-full flex flex-col gap-4">
                         <div>
                             <h3 className="m-0 mb-2 text-slate-800">{focus.title}</h3>

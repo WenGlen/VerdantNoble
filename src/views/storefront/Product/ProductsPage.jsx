@@ -1,74 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-
-import axios from 'axios';
-const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
+import { useDispatch, useSelector } from 'react-redux';
 
 import ProductCard from '../../../components/storefront/elements/ProductCard';
 import { addToCartWithStockCheck } from '../../../api/cart';
-
-
+import { fetchProducts } from '../../../slices/productsSlice';
 
 export default function ProductsPage() {
+  const dispatch = useDispatch();
+  const list = useSelector((state) => state.products.list);
+  const loading = useSelector((state) => state.products.loading);
 
-
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-
-  async function getProducts() {
-      try {            
-          const res = await axios.get (`${VITE_API_URL}/api/${VITE_API_PATH}/products/all`);
-          //console.log("res:",res);
-          if (res.data.products.length) {
-              const  resProducts  = Object.values(res.data.products);
-              //console.log("resProducts:",resProducts);
-              const resCategories = [...new Set(resProducts.map((product) => product.category))];
-              //console.log("resCategories:",resCategories);
-              setCategories(resCategories);
-
-              // 對產品進行排序：先按分類排序，再按標題排序
-              //const sortedProducts = sortProductsByCategoryAndTitle(resProducts);
-              setProducts(resProducts);
-          } else {
-
-              setProducts([]);
-          }
-      } catch (error) {
-          setProducts([]); 
-      }
-  }
-  
-
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const categories = useMemo(
+    () => [...new Set((list || []).map((p) => p.category).filter(Boolean))],
+    [list]
+  );
 
   const [activeCategory, setActiveCategory] = useState('');
   const [sortBy, setSortBy] = useState('popularity');
 
+  // 進入商品頁時刷新列表
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
   // 預設選擇「精品」；若無則選第一個分類
   useEffect(() => {
-    if (categories.length) {
+    if (categories.length && !activeCategory) {
       const defaultCategory = categories.includes('精品') ? '精品' : categories[0];
       setActiveCategory(defaultCategory);
     }
-  }, [categories]);
+  }, [categories, activeCategory]);
 
-  // 依目前分類篩選產品
   const filteredProducts = activeCategory
-    ? products.filter((product) => product.category === activeCategory)
-    : products;
+    ? (list || []).filter((product) => product.category === activeCategory)
+    : list || [];
 
   const handleAddToCart = (productId, qty = 1, stock = null, unit = '') => {
     addToCartWithStockCheck({ productId, qty, stock: stock ?? undefined, unit });
   };
 
   return (
-
-    <div className="px-8">  
-
-    {/* Banner */}
-    <section className="banner
+    <div className="px-8">
+      {/* Banner */}
+      <section className="banner
                         py-12 flex-col gap-8 border-b border-border-50">
         <div>
           <h1>挑選你的<span className="text-primary"> 綠蕨飾</span></h1>
@@ -89,38 +64,38 @@ export default function ProductsPage() {
             </button>
           ))}
         </div>
-
-    </section>
-    
-
-
-    <div>
-      <section>
-        <div className="flex-row-between-center mt-12 py-4">
-          <span className="">
-            此分類 {filteredProducts.length} 項商品
-          </span>
-          <div>
-            <span>排序方式（功能還沒做）：</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="popularity">熱門度</option>
-              <option value="price-low">價格：低到高</option>
-              <option value="price-high">價格：高到低</option>
-              <option value="newest">最新上架</option>
-            </select>
-          </div>
-        </div>
       </section>
-      
-      <section>
+
+      <div>
+        <section>
+          <div className="flex-row-between-center mt-12 py-4">
+            <span className="">
+              {loading ? '載入中…' : `此分類 ${filteredProducts.length} 項商品`}
+            </span>
+            <div>
+              <span>排序方式（功能還沒做）：</span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <option value="popularity">熱門度</option>
+                <option value="price-low">價格：低到高</option>
+                <option value="price-high">價格：高到低</option>
+                <option value="newest">最新上架</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section>
           <div /*product-card-grid*/ className="grid gap-12
                                                 grid-cols-1 
                                                 sm:grid-cols-2 
                                                 md:grid-cols-3 ">
-            {filteredProducts.map((product) => (
+            {loading && list.length === 0 ? (
+              <p className="col-span-full text-muted">載入中…</p>
+            ) : (
+              filteredProducts.map((product) => (
                 <Link key={product.id} to={`/product/${product.id}`} className="link-card">
                   <ProductCard
                     {...product}
@@ -128,16 +103,13 @@ export default function ProductsPage() {
                     onAddToCart={handleAddToCart}
                   />
                 </Link>
-            ))}
+              ))
+            )}
           </div>
-      </section>
+        </section>
 
-      <div className="h-12"/>
-
-    </div>
-
-
+        <div className="h-12"/>
+      </div>
     </div>
   );
-};
-
+}

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Hero() {
     return (
         <section className="w-full overflow-hidden">
@@ -30,9 +32,11 @@ export default function Hero() {
                             展現不需張揚的高雅品味。
                             </p>
 
-                            <button className="btn-primary max-mobile:hidden">
-                            立即探索
-                            </button>
+                            <Link to="/products">
+                                <button className="btn-primary max-mobile:hidden">
+                                    立即探索
+                                </button>
+                            </Link>
                         </div>
                     </div>
 

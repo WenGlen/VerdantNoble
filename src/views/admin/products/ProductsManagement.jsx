@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Oval } from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 
+import { createAsyncToast } from '../../../slices/ToastSlice';
 import ModButton from '../../../components/admin/elements/ModButton';
 import FoucsPanel from '../../../components/admin/panels/FoucsPanel';
 import EditPanel from '../../../components/admin/panels/EditPanel';
@@ -12,11 +14,14 @@ export default function ProductsManagement() {
     const [mod, setMod] = useState("view");
     const [products, setProducts] = useState([]);
     const [firstTimeLoading, setFirstTimeLoading] = useState(true);
+    const dispatch = useDispatch();
 
+    // ====== 一進入頁面就取得產品列表 ======
     useEffect(() => {
         getProducts();
     }, []);
 
+    // ====== 取得產品列表 ======
     async function getProducts() {
         setMod("get");
         setFocus({});
@@ -35,16 +40,20 @@ export default function ProductsManagement() {
                 const sortedProducts = sortProductsByCategoryAndTitle(resProducts);
                 setProducts(sortedProducts);
                 setFirstTimeLoading(false);
+                dispatch(createAsyncToast({message: "成功取得產品列表", success: true}));
             } else {
                 setProducts([]);
+                dispatch(createAsyncToast({message: "取得產品列表失敗", success: false}));
             }
         } catch (error) {
             setProducts([]);
+            dispatch(createAsyncToast( error.response.data ));
         }
         setMod("view");
         resetEditingProduct();
     }
 
+    // 排序功能：先抓所有分類 categories 做排序，然後每個類別裡用title 做中文字筆畫排序
     function sortProductsByCategoryAndTitle(products) {
         const sortedProducts = [...products];
         sortedProducts.sort((a, b) => {
@@ -67,13 +76,18 @@ export default function ProductsManagement() {
         return sortedProducts;
     }
 
+    // ====== 重置編輯面板 ======
     useEffect(() => {
         if (mod === "add") {
             resetEditingProduct();
         }
     }, [mod]);
 
+    // ====== 設定焦點產品 ======
     const [focus, setFocus] = useState({});
+
+
+    //====== 刪除功能 ======
     const [deleteTargetId, setDeleteTargetId] = useState("");
     const [deleting, setDeleting] = useState(false);
 
@@ -90,10 +104,14 @@ export default function ProductsManagement() {
             setFocus({});
             setMod("view");
             setDeleteTargetId("");
+            dispatch(createAsyncToast({message: "成功刪除產品", success: true}));
         } catch (error) {
             setMod("view");
+            dispatch(createAsyncToast( error.response.data ));
+            dispatch(createAsyncToast({message: "刪除產品失敗", success: false}));
         } finally {
             setDeleting(false);
+
         }
     }
 
@@ -102,6 +120,7 @@ export default function ProductsManagement() {
         setDeleteTargetId("");
     }
 
+    //====== 編輯狀態用 ======
     const [editingProductIsEnabled, setEditingProductIsEnabled] = useState(1);
     const [editingProduct, setEditingProduct] = useState({});
 
@@ -112,7 +131,7 @@ export default function ProductsManagement() {
             category: "",
             origin_price: 0,
             price: 0,
-            unit: 0,
+            unit: "",
             description: "",
             content: "",
             is_enabled: 1,
@@ -139,6 +158,7 @@ export default function ProductsManagement() {
         });
     }
 
+    //====== 編輯產品資訊用（還沒上傳） ======
     function editProduct(item) {
         setFocus({ ...item });
         setMod("update");
@@ -165,6 +185,7 @@ export default function ProductsManagement() {
         setInputError("");
     }
 
+    //====== 新增/更新 產品用 ======
     const [uploading, setUploading] = useState(false);
 
     async function uploadProduct(mod) {
@@ -181,11 +202,18 @@ export default function ProductsManagement() {
         try {
             if (mod === "add") {
                 await axios.post(`${VITE_API_URL}/api/${VITE_API_PATH}/admin/product`, uploadItem);
+                dispatch(createAsyncToast({message: "新增產品成功", success: true}));
             } else {
                 await axios.put(`${VITE_API_URL}/api/${VITE_API_PATH}/admin/product/${focus.id}`, uploadItem);
+                dispatch(createAsyncToast({message: "更新產品成功", success: true}));
             }
             getProducts();
-        } catch (error) {}
+        } catch (error) {
+            dispatch(createAsyncToast( error.response.data ));
+            dispatch(createAsyncToast({message: "上傳產品失敗", success: false}));
+        } finally {
+            setUploading(false);
+        }
         setUploading(false);
     }
 
@@ -229,6 +257,18 @@ export default function ProductsManagement() {
         return { data: { ...productData, imagesUrl: imagesUrlArray } };
     }
 
+    //======  RWD變彈窗，偵測用 ======
+    const [WindowWidth, setWindowWidth]=useState(window.innerWidth);
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowWidth(window.innerWidth);
+            //console.log(window.innerWidth);
+        }
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <>
             {firstTimeLoading ? (
@@ -239,9 +279,11 @@ export default function ProductsManagement() {
                     </div>
                 </div>
             ) : (
-                <div className="flex-row-between-center gap-6 pl-12">
-                    <div /*先佔位之後再調排版*//>
-                    <div className="h-[85vh] max-h-[85vh] w-fit p-6 rounded-lg bg-admin-card shadow-md flex flex-col gap-6">
+                <div className="relative flex-row-between-center gap-6 pl-12 h-screen">
+                    {/* 先佔位之後再調排版 */}
+                    <div/>
+                    {/* 產品列表 */}
+                    <div className="h-[85vh] max-h-[85vh] w-fit min-w-[720px] p-6 rounded-lg bg-admin-card shadow-md flex flex-col gap-6">
                         <ProductsList
                             products={products}
                             mod={mod}
@@ -258,33 +300,39 @@ export default function ProductsManagement() {
                             <ModButton type="add" mod={mod} action={() => setMod("add")} />
                         </div>
                     </div>
-
-                    <div>
-                        {mod !== "add" && mod !== "update" ? (
-                            <FoucsPanel
-                                focus={focus}
-                                setFocus={setFocus}
-                                editProduct={editProduct}
-                                setMod={setMod}
-                            />
-                        ) : (
-                            <EditPanel
-                                editingProduct={editingProduct}
-                                editingProductIsEnabled={editingProductIsEnabled}
-                                setEditingProductIsEnabled={setEditingProductIsEnabled}
-                                eventHandlereditingProduct={eventHandlereditingProduct}
-                                mod={mod}
-                                setMod={setMod}
-                                setFocus={setFocus}
-                                uploading={uploading}
-                                resetEditingProduct={resetEditingProduct}
-                                inputError={inputError}
-                                uploadProduct={uploadProduct}
-                                url={VITE_API_URL}
-                                path={VITE_API_PATH}
-                            />
-                        )}
+                    {/* 編輯面板 */}
+                    <div className={`RWD-overlay ${(mod=="view" && !focus.id && WindowWidth < 1280)  ?  "hidden" : ""}`}>
+                        <div className="RWD-container">
+                            <div className="RWD-content">
+                                {mod !== "add" && mod !== "update" ? (
+                                    <FoucsPanel
+                                        focus={focus}
+                                        setFocus={setFocus}
+                                        editProduct={editProduct}
+                                        setMod={setMod}
+                                    />
+                                ) : (
+                                    <EditPanel
+                                        editingProduct={editingProduct}
+                                        editingProductIsEnabled={editingProductIsEnabled}
+                                        setEditingProductIsEnabled={setEditingProductIsEnabled}
+                                        eventHandlereditingProduct={eventHandlereditingProduct}
+                                        mod={mod}
+                                        setMod={setMod}
+                                        setFocus={setFocus}
+                                        uploading={uploading}
+                                        resetEditingProduct={resetEditingProduct}
+                                        inputError={inputError}
+                                        uploadProduct={uploadProduct}
+                                        url={VITE_API_URL}
+                                        path={VITE_API_PATH}
+                                    />
+                                )}
+                            </div>
+                        </div>
                     </div>
+
+                    <div className="tablet:block hidden"/>
                 </div>
             )}
         </>

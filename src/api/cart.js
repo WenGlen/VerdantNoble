@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { store } from '../store/store';
+import { showStorefrontToast } from '../slices/StorefrontToastSlice';
 
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 const base = `${VITE_API_URL}/api/${VITE_API_PATH}`;
@@ -67,20 +69,20 @@ export function clearCart() {
   return axios.delete(`${base}/carts`);
 }
 
-// --- 自訂事件：通知 MainLayout 更新購物車數量與 Toast ---
+// --- 自訂事件：通知 MainLayout 更新購物車數量 ---
 
 export const EVENT_CART_UPDATED = 'cartUpdated';
-export const EVENT_SHOW_TOAST = 'showToast';
 
 export function notifyCartUpdated() {
   window.dispatchEvent(new CustomEvent(EVENT_CART_UPDATED));
 }
 
 /**
+ * 顯示前台 Toast（由 Redux storefrontToast 控管）
  * @param {string} message
  */
 export function notifyToast(message) {
-  window.dispatchEvent(new CustomEvent(EVENT_SHOW_TOAST, { detail: { message } }));
+  store.dispatch(showStorefrontToast(message));
 }
 
 // --- 加入購物車（含庫存檢查與 Toast，統一邏輯）---
