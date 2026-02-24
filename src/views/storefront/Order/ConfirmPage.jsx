@@ -308,8 +308,8 @@ export default function ConfirmPage({
                             {...register('payment.account', {
                                 validate: (v) => {
                                     if (paymentInfo.type !== '信用卡') return true;
-                                    const len = (v || '').replace(/\D/g, '').length;
-                                    return len === 16 || '請輸入 16 碼信用卡卡號';
+                                    const digits = (v || '').replace(/\D/g, '').trim();
+                                    return digits.length === 16 || '請輸入 16 碼信用卡卡號';
                                 },
                             })}
                             onChange={(e) => {
@@ -326,8 +326,11 @@ export default function ConfirmPage({
                                 placeholder="MM / YY"
                                 error={errors.payment?.expiryDate?.message}
                                 {...register('payment.expiryDate', {
-                                    validate: (v) =>
-                                        paymentInfo.type !== '信用卡' || (v && v.trim()) || '到期日為必填',
+                                    validate: () => {
+                                        if (paymentInfo.type !== '信用卡') return true;
+                                        const val = (paymentInfo.expiryDate ?? '').toString().trim();
+                                        return val.length > 0 || '請輸入到期日（有填即可）';
+                                    },
                                 })}
                                 onChange={(e) => {
                                     setPaymentInfo((prev) => ({ ...prev, expiryDate: e.target.value }));
@@ -341,8 +344,11 @@ export default function ConfirmPage({
                                 placeholder="xxx"
                                 error={errors.payment?.CVV?.message}
                                 {...register('payment.CVV', {
-                                    validate: (v) =>
-                                        paymentInfo.type !== '信用卡' || (v && v.trim()) || 'CVV 為必填',
+                                    validate: () => {
+                                        if (paymentInfo.type !== '信用卡') return true;
+                                        const val = (paymentInfo.CVV ?? '').toString().trim();
+                                        return val.length > 0 || '請輸入 CVV（有填即可）';
+                                    },
                                 })}
                                 onChange={(e) => {
                                     setPaymentInfo((prev) => ({ ...prev, CVV: e.target.value }));
@@ -358,8 +364,11 @@ export default function ConfirmPage({
                             placeholder="請輸入持卡人姓名"
                             error={errors.payment?.cardHolderName?.message}
                             {...register('payment.cardHolderName', {
-                                validate: (v) =>
-                                    paymentInfo.type !== '信用卡' || (v && v.trim()) || '持卡人姓名為必填',
+                                validate: () => {
+                                    if (paymentInfo.type !== '信用卡') return true;
+                                    const val = (paymentInfo.cardHolderName ?? '').toString().trim();
+                                    return val.length > 0 || '請輸入持卡人姓名（有填即可）';
+                                },
                             })}
                             onChange={(e) => {
                                 setPaymentInfo((prev) => ({ ...prev, cardHolderName: e.target.value }));

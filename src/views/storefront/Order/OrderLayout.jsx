@@ -26,6 +26,8 @@ export default function OrderLayout() {
     const [step, setStep] = useState(0);
     const [orderConfirmData, setOrderConfirmData] = useState(null);
     const [cartItems, setCartItems] = useState([]);
+    /** 結帳當下快照的購物車品項，供完成頁顯示用（避免清空 API 後完成頁沒商品、金額為 0） */
+    const [completedOrderItems, setCompletedOrderItems] = useState(null);
     const [cartLoading, setCartLoading] = useState(true);
 
     const fetchCart = useCallback(async () => {
@@ -116,6 +118,7 @@ export default function OrderLayout() {
                     cartItems={cartItems}
                     setStep={setStep}
                     onConfirm={async (data) => {
+                        setCompletedOrderItems([...cartItems]);
                         try {
                             await clearCart();
                         } catch {
@@ -135,7 +138,7 @@ export default function OrderLayout() {
             {
                 step === 3 && (
                 <CompletePage
-                    cartItems={cartItems}
+                    cartItems={completedOrderItems ?? cartItems}
                     orderConfirmData={orderConfirmData}
                 />
             )

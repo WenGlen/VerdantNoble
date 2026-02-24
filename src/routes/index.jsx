@@ -1,11 +1,10 @@
 import { Fragment } from 'react';
 import { Outlet } from 'react-router-dom';
-import DocumentTitle from './DocumentTitle';
-
-import MainLayout from '../views/storefront/MainLayout.jsx';
 
 import HomePage from '../views/storefront/HomePage.jsx';
 
+import AdminHomePage from '../views/admin/AdminHomePage.jsx';
+import ProductsManagement from '../views/admin/products/ProductsManagement.jsx';
 import ProductsPage from '../views/storefront/Product/ProductsPage.jsx';
 import ProductDetailPage from '../views/storefront/Product/ProductDetailPage.jsx';
 import ArticlesPage from '../views/storefront/Article/ArticlesPage.jsx';
@@ -27,9 +26,9 @@ import APITestPage from '../views/storefront/staticPages/APITestPage.jsx';
 // 後台頁面
 import AdminLoginPage from '../views/admin/AdminLoginPage.jsx';
 
-import AdminLayout from '../views/admin/AdminLayout.jsx';
-import AdminHomePage from '../views/admin/AdminHomePage.jsx';
-import ProductsManagement from '../views/admin/products/ProductsManagement.jsx';
+import DocumentTitle from './DocumentTitle';
+
+import MainLayout from '../views/storefront/MainLayout.jsx';
 
 // 頁面標題集中管理（顯示為：title | 綠蕨飾）
 

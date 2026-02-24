@@ -125,11 +125,13 @@ export default {
         xl: '32px',
         '2xl': '48px',
       },
-      screens: {
-        mobile: { max: '768px' },
-      },
     },
   },
-  plugins: [],
+  plugins: [
+    // 自訂 mobile 變體：僅在 768px 以下套用（等同 max-width: 768px） 之後再看怎麼調整
+    function ({ addVariant }) {
+      addVariant('mobile', '@media (max-width: 768px)');
+    },
+  ],
 }
 
