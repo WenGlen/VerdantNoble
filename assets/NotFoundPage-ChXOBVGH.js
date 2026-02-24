@@ -1,0 +1,1 @@
+import{j as e}from"./index-C8eEf4aG.js";import{g as s,b as a}from"./vendor-router-CzCB4GFz.js";function n(){const t=s();return a.useEffect(()=>{setTimeout(()=>{t("/",{replace:!0})},3e3)},[]),e.jsxs(e.Fragment,{children:[e.jsx("div",{className:"h-24"}),e.jsx("div",{className:"not-found-page",children:e.jsx("h1",{children:"404 Not Found"})})]})}export{n as default};

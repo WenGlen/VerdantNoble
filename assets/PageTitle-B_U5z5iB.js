@@ -1,0 +1,1 @@
+import{j as e}from"./index-C8eEf4aG.js";function i({title:r,mobile:s=""}){return e.jsxs("div",{className:`w-full flex flex-row items-center ${s==="hidden"?"max-mobile:hidden":""}`,children:[e.jsx("h1",{className:"text-2xl",children:r}),e.jsx("div",{className:"flex-1 h-10 border-b border-border-50"})]})}export{i as P};
