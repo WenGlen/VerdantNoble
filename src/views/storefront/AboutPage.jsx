@@ -47,10 +47,8 @@ export default function AboutPage() {
             <div className="w-full mt-8 flex flex-col md:flex-row md:justify-between gap-4 ">
 
               <div className="">
-                <div className="w-full aspect-[16/9] md:w-[280px] md:aspect-[3/4] bg-placeholder rounded-[4px] overflow-hidden">
-                  <div className="w-full h-full flex-row-center-center text-4xl ">
-                    🌿
-                  </div>
+                <div className="w-full aspect-[4/3] md:w-[280px] md:aspect-[3/4] bg-placeholder rounded-[4px] overflow-hidden">
+                  <img src="https://i.meee.com.tw/ahK7yt3.png" alt="about image" className="w-full h-full object-cover" />
                 </div>
               </div>
 
