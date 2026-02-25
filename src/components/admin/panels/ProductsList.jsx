@@ -99,7 +99,7 @@ export default function ProductsList({
                 ref={tableContainerRef}
                 className="max-w-[960px] flex-1 min-h-0 overflow-y-auto overflow-x-auto flex flex-col p-3 rounded shadow-inner bg-white border border-slate-200 max-md:h-fit"
             >
-                <table ref={tableRef} className="border-collapse">
+                <table ref={tableRef} className="border-collapse text-admin-text">
                     <thead>
                         <tr className="text-center bg-slate-200 text-sm">
                             <th className="" />
@@ -108,7 +108,7 @@ export default function ProductsList({
                             <th>售價</th>
                             <th>庫存</th>
                             <th>上架</th>
-                            <th>操作</th>
+                            <th className="w-[120px]">操作</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,7 +117,7 @@ export default function ProductsList({
                             return (
                                 <tr
                                     key={product.id}
-                                    className={`border-b border-slate-400 ${product.is_enabled ? "" : "text-slate-500"}`}
+                                    className={`border-b border-admin-border ${product.is_enabled ? "" : "text-admin-text-muted"}`}
                                 >
                                     <td className="min-w-[50px] py-2 px-3"> {globalIndex + 1}</td>
                                     <td className="min-w-[220px] max-w-[220px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap py-2 px-3" title={product.title}>
@@ -125,14 +125,13 @@ export default function ProductsList({
                                     </td>
                                     <td className="text-center min-w-[60px] py-2 px-3"> {product.category}</td>
                                     <td className="min-w-[90px] text-right py-2 px-3">
-                                        {product.price} <span className="text-xs text-slate-500">元</span>
+                                        {product.price} <span className="text-xs">元</span>
                                     </td>
                                     <td className="w-[70px] text-right py-2 px-3">
-                                        {product.stock} <span className="text-xs text-slate-500">{product.unit}</span>
+                                        {product.stock} <span className="text-xs">{product.unit}</span>
                                     </td>
                                     <td className="text-center py-2 px-3"> {product.is_enabled ? "✔" : "✖"}</td>
-                                    <td className="w-[120px] text-center py-2">
-                                        <div className="flex justify-between [&_img]:my-1">
+                                    <td className="text-center py-2 flex-row-center gap-4 [&_img]:my-1">
                                             <ModButton type="view" mod={mod} action={() => setFocus(product)} />
                                             <ModButton
                                                 type="delete"
@@ -145,7 +144,6 @@ export default function ProductsList({
                                                 deleteing={deleting}
                                             />
                                             <ModButton type="update" mod={mod} action={() => editProduct(product)} />
-                                        </div>
                                     </td>
                                 </tr>
                             );
@@ -154,10 +152,10 @@ export default function ProductsList({
                 </table>
             </div>
             {totalPages > 1 && (
-                <div className="flex justify-center items-center gap-8 mt-4 pt-3 border-t border-slate-200">
+                <div className="flex justify-center items-center gap-8">
                     <button
                         type="button"
-                        className="rotate-180 rounded px-3 py-1.5 bg-slate-200 text-slate-800 text-sm border-none cursor-pointer hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="rotate-180 rounded px-3 py-1.5 bg-admin-card-25 text-admin-text text-sm border-none cursor-pointer hover:bg-admin-card-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={goToPreviousPage}
                         disabled={currentPage === 1}
                     >
@@ -169,8 +167,8 @@ export default function ProductsList({
                                 key={page}
                                 className={`min-w-8 h-8 px-2 rounded text-sm border-none cursor-pointer transition-colors ${
                                     currentPage === page
-                                        ? "bg-sky-700 text-slate-100 font-semibold"
-                                        : "bg-slate-200 text-slate-800 hover:bg-sky-200"
+                                        ? "bg-admin-primary text-admin-text-invert font-semibold"
+                                        : "bg-transparent hover:bg-admin-btn-muted"
                                 }`}
                                 onClick={() => goToPage(page)}
                             >
@@ -180,7 +178,7 @@ export default function ProductsList({
                     </div>
                     <button
                         type="button"
-                        className="rounded px-3 py-1.5 bg-slate-200 text-slate-800 text-sm border-none cursor-pointer hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="rounded px-3 py-1.5 bg-admin-card-25 text-admin-text text-sm border-none cursor-pointer hover:bg-admin-card-50 disabled:opacity-50 disabled:cursor-not-allowed"
                         onClick={goToNextPage}
                         disabled={currentPage === totalPages}
                     >

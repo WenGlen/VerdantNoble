@@ -85,46 +85,4 @@ export function notifyToast(message) {
   store.dispatch(showStorefrontToast(message));
 }
 
-// --- 加入購物車（含庫存檢查與 Toast，統一邏輯）---
-
-const MSG_LIMIT = '超過可購數量上限<br/>（庫存僅 ';
-const MSG_LIMIT_SUFFIX = '）';
-const MSG_ADDED = '已加入購物車';
-const MSG_FAIL = '加入購物車失敗<br/>（超過可購數量上限）';
-
-/**
- * 檢查庫存後加入購物車，並依結果顯示 Toast、觸發 cartUpdated。
- * 相同產品會累加數量（先 GET 購物車，若已有該品項則 PUT 更新數量，否則 POST 新增）。
- * @param {object} params
- * @param {string} params.productId - 商品 id
- * @param {number} [params.qty=1] - 數量
- * @param {number|null} [params.stock=null] - 庫存數量，有值時會先 GET 購物車檢查總量
- * @param {string} [params.unit=''] - 單位（用於庫存上限 Toast，如「個」）
- * @returns {Promise<{ success: boolean }>} 是否成功加入
- */
-export async function addToCartWithStockCheck({ productId, qty = 1, stock = null, unit = '' }) {
-  try {
-    const cartRes = await getCart();
-    const carts = cartRes.data?.data?.carts;
-    const currentQty = getProductQtyInCart(cartRes.data, productId);
-
-    if (stock != null && currentQty + qty > stock) {
-      notifyToast(`${MSG_LIMIT}${stock} ${unit}${MSG_LIMIT_SUFFIX}`);
-      return { success: false };
-    }
-
-    const existing = Array.isArray(carts) ? carts.find((c) => c.product_id === productId) : null;
-    if (existing) {
-      await updateCartItem(existing.id, productId, (existing.qty || 0) + qty);
-    } else {
-      await addToCart(productId, qty);
-    }
-    notifyCartUpdated();
-    notifyToast(MSG_ADDED);
-    return { success: true };
-  } catch (err) {
-    const msg = err.response?.data?.message || MSG_FAIL;
-    notifyToast(msg);
-    return { success: false };
-  }
-}
+// 加入購物車（含庫存檢查）已改由 Redux cartSlice.addToCartWithStockCheck 處理，從 state.products + state.cart 判斷，不再呼叫 getCart。

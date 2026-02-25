@@ -54,7 +54,7 @@ export default function AdminLoginPage() {
 
   return (
     <main className="w-full h-screen flex-col-center">
-      
+      {/* 測試用 */}
             <div className="fixed bottom-0 left-0 z-50 text-[8px] text-white p-2 bg-black/50 rounded-tr-md  flex flex-row-between-center gap-2">
                 <p>快速登入用</p>
                 <p>isLoggedIn：{isLoggedIn ? 'true' : 'false'}</p>

@@ -37,15 +37,15 @@ export default function ArticleDetailPage() {
         <time className="text-secondary" dateTime={article.published_at}>
           {formatDate(article.published_at)}
         </time>
-        <h1 >{article.title}</h1>
+        <h1 className="text-3xl">{article.title}</h1>
       </div>
     </section>
 
     <section >
 
-      <div className="mx-auto max-w-screen-md space-y-8 py-8">
+      <div className="mx-auto max-w-screen-md space-y-8 p-8">
 
-        <p className="font-serif text-lg">{article.excerpt}</p>
+        <p className="font-serif text-lg text-secondary">{article.excerpt}</p>
       
         
         {article.content.map((item, index) => {
@@ -91,7 +91,7 @@ export default function ArticleDetailPage() {
     <section >
       <div className=" border-t border-border py-12">
 
-        <div className="max-w-screen-md mx-auto flex flex-col gap-16">
+        <div className="max-w-screen-md mx-auto flex flex-col gap-16 p-8">
 
           <div className="flex flex-col gap-4">
 

@@ -41,32 +41,32 @@ export default function ModButton({
     }
 
     const isDisabled = mod !== "view";
-    const btnLight = "mx-1 rounded px-2 py-1 font-semibold cursor-pointer bg-slate-200 text-slate-800 border-none hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:font-normal disabled:hover:bg-slate-200";
-    const btnPrimary = "rounded px-2 py-1 cursor-pointer bg-sky-700 text-slate-100 border-none hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed";
-    const btnWarning = "rounded px-2 py-1 cursor-pointer bg-orange-700 text-white border-none hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed";
 
     return (
         <div className="relative">
             <button
                 type="button"
-                className={`${btnLight} ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+                className={ type === "view" || type === "delete" || type === "update" ? "btn-icon" : "admin-btn-muted "}
+                disabled={isDisabled}
                 onClick={() => { if (mod === "view") action(); }}
             >
                 {buttonContent()}
             </button>
 
             {type === "delete" && mod === "delete" && id === targetId && (
-                <div className="absolute top-0 left-5 z-50 -translate-x-1/2 w-[120px] h-8 flex justify-center items-center gap-2 bg-white">
+                <div className="absolute top-0 left-1/2 z-50 -translate-x-1/2 w-[130px] h-8 flex justify-center items-center gap-2 bg-white">
                     <button
                         type="button"
-                        className={`${btnPrimary} ${deleteing ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className="admin-btn-muted text-xs px-2 py-1"
+                        disabled={deleteing}
                         onClick={onCancel}
                     >
                         返回
                     </button>
                     <button
                         type="button"
-                        className={`${btnWarning} ${deleteing ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className="admin-btn-warning text-xs px-2 py-1"
+                        disabled={deleteing}
                         onClick={() => onConfirmDelete(id)}
                     >
                         {deleteing ? "刪除中..." : "確認刪除"}

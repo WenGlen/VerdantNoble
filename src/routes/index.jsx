@@ -30,12 +30,19 @@ import APITestPage from '../views/storefront/staticPages/APITestPage.jsx';
 import AdminLoginPage from '../views/admin/AdminLoginPage.jsx';
 
 import AdminLayout from '../views/admin/AdminLayout.jsx';
-
 import AdminHomePage from '../views/admin/AdminHomePage.jsx';
 
-import ProductsManagement from '../views/admin/products/ProductsManagement.jsx';
-import OrdersManagement from '../views/admin/orders/OrdersManagement.jsx';
+import ProductsManagement from '../views/admin/ProductsManagement/ProductsManagement.jsx';
+import ProductsMark from '../views/admin/ProductsManagement/ProductsMark.jsx';
+import ArticlesManagement from '../views/admin/ArticlesManagement/ArticlesManagement.jsx';
+import ArticlesMark from '../views/admin/ArticlesManagement/ArticlesMark.jsx';
+import OrdersList from '../views/admin/OrdersManagement/OrdersList.jsx';
 
+import ArticlesListIcon from '../img/ArticlesList.png';
+import ArticlesMarkIcon from '../img/ArticlesMark.png';
+import ProductsListIcon from '../img/ProductsList.png';
+import ProductsMarkIcon from '../img/ProductsMark.png';
+import OrdersListIcon from '../img/OrdersList.png';
 
 // 頁面標題集中管理（顯示為：title | 綠蕨飾）
 
@@ -80,13 +87,17 @@ const footerNavItems = storefrontPages.footerNav.map((item) => ({
 
 // 後台頁面
 const adminPages =[
-    { path: "ProductsManagement", element: <ProductsManagement />, title: '商品管理' },
-    { path: "OrdersManagement", element: <OrdersManagement />, title: '訂單管理' },
+    { path: "ProductsManagement", element: <ProductsManagement />, title: '商品列表', icon: ProductsListIcon },
+    { path: "ProductsMark", element: <ProductsMark />, title: '商品標籤', icon: ProductsMarkIcon },
+    { path: "ArticlesManagement", element: <ArticlesManagement />, title: '文章列表', icon: ArticlesListIcon },
+    { path: "ArticlesMark", element: <ArticlesMark />, title: '文章標籤', icon: ArticlesMarkIcon },
+    { path: "OrdersList", element: <OrdersList />, title: '訂單列表', icon: OrdersListIcon },
 ];
 
 const adminPagesItems = adminPages.map((item) => ({
     label: item.title,
     path: "/admin/" + item.path,  // 導航連結需絕對路徑
+    icon: item.icon,
 }));
 
 
@@ -103,65 +114,62 @@ export default function routes() {
     return [
         {
             element: <RootLayout />,
-            children: [{
-                path: '/',
-                element: <MainLayout headerNavItems={headerNavItems} footerNavItems={footerNavItems} />,
-                children: [
-                    {
-                        index: true,
-                        element: <HomePage />,
-                        handle: { title: '' },
-                    },
-                    ...Object.values(storefrontPages).flatMap((routes) =>
-                        routes.map((item) => ({
+            children: [
+                {
+                    path: '/',
+                    element: <MainLayout headerNavItems={headerNavItems} footerNavItems={footerNavItems} />,
+                    children: [
+                        {
+                            index: true,
+                            element: <HomePage />,
+                            handle: { title: '' },
+                        },
+                        ...Object.values(storefrontPages).flatMap((routes) =>
+                            routes.map((item) => ({
+                                path: item.path,
+                                element: item.element,
+                                handle: { title: item.title },
+                            }))
+                        ),
+                        {
+                            path: "user",
+                            element: <UserLayout />,
+                            children: [
+                                {
+                                    path: "orders",
+                                    element: <OrdersPage />,
+                                    handle: { title: '查看訂單' },
+                                },
+                                {
+                                    path: "info",
+                                    element: <InfoPage />,
+                                    handle: { title: '會員資料' },
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    path: "/login",
+                    element: <AdminLoginPage />,
+                    handle: { title: '後台登入' },
+                },
+                {
+                    path: '/admin',
+                    element: <AdminLayout adminPagesItems={adminPagesItems} />,
+                    children: [
+                        {
+                            index: true,
+                            element: <AdminHomePage />,
+                            handle: { title: '後台首頁' },
+                        },
+                        ...adminPages.map((item) => ({
                             path: item.path,
                             element: item.element,
                             handle: { title: item.title },
-                        }))
-                    ),
-                    {
-                        path: "user",
-                        element: <UserLayout />,
-                        children: [
-                            {
-                                path: "orders",
-                                element: <OrdersPage />,
-                                handle: { title: '查看訂單' },
-                            },
-                            {
-                                path: "info",
-                                element: <InfoPage />,
-                                handle: { title: '會員資料' },
-                            },
-                        ],
-                    },
-
-
-                ],
-
-            }]
-        },  
-
-        { 
-            path: "/login", 
-            element: <AdminLoginPage />, 
-            handle: { title: '後台登入' } 
-        },
-
-        {
-            path: '/admin',
-            element: <AdminLayout adminPagesItems={adminPagesItems} />,
-            children: [
-                {
-                    index: true,
-                    element: <AdminHomePage />,
-                    handle: { title: '後台首頁' },
+                        })),
+                    ],
                 },
-                ...adminPages.map((item) => ({
-                    path: item.path,
-                    element: item.element,
-                    handle: { title: item.title },
-                })),
             ],
         },
     ];

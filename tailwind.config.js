@@ -92,6 +92,12 @@ export default {
             focus: 'var(--color-admin-card-focus)',
             edit: 'var(--color-admin-card-edit)',
           },
+          border: {
+            DEFAULT: 'var(--color-admin-border)',
+            '75': 'var(--color-admin-border-75)',
+            '50': 'var(--color-admin-border-50)',
+            '25': 'var(--color-admin-border-25)',
+          },
           text: {
             DEFAULT: 'var(--color-admin-text)',
             hover: 'var(--color-admin-text-hover)',
@@ -100,6 +106,12 @@ export default {
             sub: 'var(--color-admin-text-sub)',
             emphasized: 'var(--color-admin-text-emphasized)',
             placeholder: 'var(--color-admin-text-placeholder)',
+          },
+          btn: {
+            muted: 'var(--color-admin-btn-muted)',
+            mutedHover: 'var(--color-admin-btn-muted-hover)',
+            warning: 'var(--color-admin-btn-warning)',
+            warningHover: 'var(--color-admin-btn-warning-hover)',
           },
         },
       },

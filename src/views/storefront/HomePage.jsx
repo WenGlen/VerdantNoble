@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Hero from '../../components/storefront/sections/Home/Hero';
 import Introduce from '../../components/storefront/sections/Home/Introduce';
 import Features from '../../components/storefront/sections/Home/Features';
 
 import ProductCard from '../../components/storefront/elements/ProductCard';
-import { addToCartWithStockCheck } from '../../api/cart';
+import { addToCartWithStockCheck } from '../../slices/cartSlice';
 
 export default function HomePage() {
+  const dispatch = useDispatch();
   const list = useSelector((state) => state.products.list ?? []);
 
   // 精品、價位前四高
@@ -21,7 +22,7 @@ export default function HomePage() {
   }, [list]);
 
   const handleAddToCart = (productId, qty = 1, stock = null, unit = '') => {
-    addToCartWithStockCheck({ productId, qty, stock: stock ?? undefined, unit });
+    dispatch(addToCartWithStockCheck({ productId, qty, stock: stock ?? undefined, unit }));
   };
 
   return (

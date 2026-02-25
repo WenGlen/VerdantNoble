@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const toastSlice = createSlice({
+export const dashboardToastSlice = createSlice({
   name: "dashboardToast",
   initialState: [
     /*
@@ -29,8 +29,8 @@ export const toastSlice = createSlice({
   },
 });
 
-export const createAsyncToast = createAsyncThunk(
-  'toast/createAsyncToast',
+export const createAsyncDashboardToast = createAsyncThunk(
+  'dashboardToast/createAsyncDashboardToast',
   async (payload, { dispatch, requestId }) => {
     const id = requestId ?? Date.now();
     dispatch(setMessage({
@@ -44,5 +44,5 @@ export const createAsyncToast = createAsyncThunk(
   },
 );
 
-export const { setMessage, removeMessage } = toastSlice.actions;
-export default toastSlice.reducer;
+export const { setMessage, removeMessage } = dashboardToastSlice.actions;
+export default dashboardToastSlice.reducer;

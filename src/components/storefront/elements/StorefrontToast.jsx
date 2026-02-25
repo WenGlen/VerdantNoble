@@ -35,7 +35,7 @@ export default function StorefrontToast() {
   if (messages.length === 0) return null;
 
   return (
-    <div className="h-[120px] w-fit overflow-hidden pointer-events-none flex flex-col gap-4">
+    <div className="h-[300px] w-fit overflow-hidden pointer-events-none flex flex-col justify-start pt-4">
       {messages.map((item) => {
         const isEntered = enteredIds.has(item.id);
         const isExiting = exitingIds.has(item.id);
@@ -46,7 +46,7 @@ export default function StorefrontToast() {
               style={{ transitionDuration: isEntered || isExiting ? `${EXIT_ANIMATION_MS}ms` : '0ms' }}
             >
               <div
-                className="mt-4 bg-secondary text-white px-4 py-2 rounded-md flex-row-center-center"
+                className="mt-2 bg-secondary text-white px-4 py-2 rounded-md flex-row-center-center"
                 dangerouslySetInnerHTML={typeof item.message === 'string' ? { __html: item.message } : undefined}
               >
                 {typeof item.message !== 'string' ? item.message : null}

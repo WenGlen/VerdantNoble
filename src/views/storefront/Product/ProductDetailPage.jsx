@@ -6,7 +6,8 @@ const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 
 import CareTipsSection from '../../../components/storefront/sections/products/CareTipsSection';
 import QuantityController from '../../../components/storefront/elements/QuantityController';
-import { addToCartWithStockCheck } from '../../../api/cart';
+import { useDispatch } from 'react-redux';
+import { addToCartWithStockCheck } from '../../../slices/cartSlice';
 
 
 
@@ -67,6 +68,7 @@ export default function ProductDetailPage() {
 
 
 
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(1);
   const [cartLoading, setCartLoading] = useState(false);
@@ -75,12 +77,16 @@ export default function ProductDetailPage() {
     if (!product?.id) return;
     setCartLoading(true);
     try {
-      await addToCartWithStockCheck({
-        productId: product.id,
-        qty: quantity,
-        stock: product.stock ?? undefined,
-        unit: product.unit ?? '',
-      });
+      await dispatch(
+        addToCartWithStockCheck({
+          productId: product.id,
+          qty: quantity,
+          stock: product.stock ?? undefined,
+          unit: product.unit ?? '',
+        })
+      ).unwrap();
+    } catch {
+      // over_limit or API error already toasts
     } finally {
       setCartLoading(false);
     }

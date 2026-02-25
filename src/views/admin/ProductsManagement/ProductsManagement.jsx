@@ -4,7 +4,7 @@ import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 
-import { createAsyncToast } from '../../../slices/ToastSlice';
+import { createAsyncDashboardToast } from '../../../slices/DashboardToastSlice';
 import ModButton from '../../../components/admin/elements/ModButton';
 import FoucsPanel from '../../../components/admin/panels/FoucsPanel';
 import EditPanel from '../../../components/admin/panels/EditPanel';
@@ -40,14 +40,14 @@ export default function ProductsManagement() {
                 const sortedProducts = sortProductsByCategoryAndTitle(resProducts);
                 setProducts(sortedProducts);
                 setFirstTimeLoading(false);
-                dispatch(createAsyncToast({message: "成功取得產品列表", success: true}));
+                dispatch(createAsyncDashboardToast({message: "成功取得產品列表", success: true}));
             } else {
                 setProducts([]);
-                dispatch(createAsyncToast({message: "取得產品列表失敗", success: false}));
+                dispatch(createAsyncDashboardToast({message: "取得產品列表失敗", success: false}));
             }
         } catch (error) {
             setProducts([]);
-            dispatch(createAsyncToast( error.response.data ));
+            dispatch(createAsyncDashboardToast( error.response.data ));
         }
         setMod("view");
         resetEditingProduct();
@@ -104,11 +104,11 @@ export default function ProductsManagement() {
             setFocus({});
             setMod("view");
             setDeleteTargetId("");
-            dispatch(createAsyncToast({message: "成功刪除產品", success: true}));
+            dispatch(createAsyncDashboardToast({message: "成功刪除產品", success: true}));
         } catch (error) {
             setMod("view");
-            dispatch(createAsyncToast( error.response.data ));
-            dispatch(createAsyncToast({message: "刪除產品失敗", success: false}));
+            dispatch(createAsyncDashboardToast( error.response.data ));
+            dispatch(createAsyncDashboardToast({message: "刪除產品失敗", success: false}));
         } finally {
             setDeleting(false);
 
@@ -129,8 +129,10 @@ export default function ProductsManagement() {
             title: "",
             sub_title: "",
             category: "",
-            origin_price: 0,
-            price: 0,
+            origin_price: null,
+            price: null,
+            updated_at: "",
+            stock: null,
             unit: "",
             description: "",
             content: "",
@@ -141,7 +143,6 @@ export default function ProductsManagement() {
             imageUrl3: "",
             imageUrl4: "",
             imageUrl5: "",
-            stock: 0,
             soldQuantity: 0,
         });
         setEditingProductIsEnabled(1);
@@ -168,6 +169,7 @@ export default function ProductsManagement() {
             category: item.category || "",
             origin_price: item.origin_price || 0,
             price: item.price || 0,
+            updated_at: item.updated_at || "",
             stock: item.stock || 0,
             soldQuantity: item.soldQuantity || 0,
             unit: item.unit || "個",
@@ -202,15 +204,15 @@ export default function ProductsManagement() {
         try {
             if (mod === "add") {
                 await axios.post(`${VITE_API_URL}/api/${VITE_API_PATH}/admin/product`, uploadItem);
-                dispatch(createAsyncToast({message: "新增產品成功", success: true}));
+                dispatch(createAsyncDashboardToast({message: "新增產品成功", success: true}));
             } else {
                 await axios.put(`${VITE_API_URL}/api/${VITE_API_PATH}/admin/product/${focus.id}`, uploadItem);
-                dispatch(createAsyncToast({message: "更新產品成功", success: true}));
+                dispatch(createAsyncDashboardToast({message: "更新產品成功", success: true}));
             }
             getProducts();
         } catch (error) {
-            dispatch(createAsyncToast( error.response.data ));
-            dispatch(createAsyncToast({message: "上傳產品失敗", success: false}));
+            dispatch(createAsyncDashboardToast( error.response.data ));
+            dispatch(createAsyncDashboardToast({message: "上傳產品失敗", success: false}));
         } finally {
             setUploading(false);
         }
@@ -283,7 +285,7 @@ export default function ProductsManagement() {
                     {/* 先佔位之後再調排版 */}
                     <div/>
                     {/* 產品列表 */}
-                    <div className="h-[85vh] max-h-[85vh] w-fit min-w-[720px] p-6 rounded-lg bg-admin-card shadow-md flex flex-col gap-6">
+                    <div className="h-[90vh] max-h-[90vh] w-fit min-w-[720px] p-6 rounded-lg bg-admin-card shadow-md flex flex-col gap-6">
                         <ProductsList
                             products={products}
                             mod={mod}
@@ -295,7 +297,7 @@ export default function ProductsManagement() {
                             deleting={deleting}
                             editProduct={editProduct}
                         />
-                        <div className="flex justify-between mt-3.5">
+                        <div className="flex justify-between ">
                             <ModButton type="get" mod={mod} action={() => getProducts()} />
                             <ModButton type="add" mod={mod} action={() => setMod("add")} />
                         </div>

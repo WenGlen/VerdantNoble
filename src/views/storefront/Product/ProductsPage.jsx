@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ProductCard from '../../../components/storefront/elements/ProductCard';
-import { addToCartWithStockCheck } from '../../../api/cart';
+import { addToCartWithStockCheck } from '../../../slices/cartSlice';
 import { fetchProducts } from '../../../slices/productsSlice';
 
 export default function ProductsPage() {
@@ -37,7 +37,7 @@ export default function ProductsPage() {
     : list || [];
 
   const handleAddToCart = (productId, qty = 1, stock = null, unit = '') => {
-    addToCartWithStockCheck({ productId, qty, stock: stock ?? undefined, unit });
+    dispatch(addToCartWithStockCheck({ productId, qty, stock: stock ?? undefined, unit }));
   };
 
   return (
@@ -78,10 +78,9 @@ export default function ProductsPage() {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
-                <option value="popularity">熱門度</option>
+                <option value="newest">最新上架</option>
                 <option value="price-low">價格：低到高</option>
                 <option value="price-high">價格：高到低</option>
-                <option value="newest">最新上架</option>
               </select>
             </div>
           </div>

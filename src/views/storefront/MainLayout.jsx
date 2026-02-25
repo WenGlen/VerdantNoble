@@ -1,9 +1,10 @@
 import { Outlet, Link , NavLink , useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import StorefrontToast from '../../components/storefront/elements/StorefrontToast';
-import { getCart, EVENT_CART_UPDATED } from '../../api/cart';
+import { EVENT_CART_UPDATED } from '../../api/cart';
 import { fetchProducts } from '../../slices/productsSlice';
+import { fetchCart, selectCartCount } from '../../slices/cartSlice';
 
 import userIcon from '../../img/user.png';
 import cartIcon from '../../img/cart.png';
@@ -17,6 +18,7 @@ export default function MainLayout({
 
 }) {
     const dispatch = useDispatch();
+    const cartCount = useSelector(selectCartCount);
     {/* 換頁時回到頂部 */}
     const location = useLocation();
 
@@ -26,7 +28,6 @@ export default function MainLayout({
 
 
     {/* 吐司彈窗：由 Redux storefrontToast 控管 */}
-    const [cartCount, setCartCount] = useState(0);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     /** 從 cookie 判斷是否已登入（與 LoginPage 存的 GlenToken 一致） */
@@ -42,21 +43,9 @@ export default function MainLayout({
         setIsLoggedIn(!!getLoginToken());
     }, [location.pathname]);
 
-    async function fetchCart() {
-        try {
-            const res = await getCart();
-            if (res.data?.success && Array.isArray(res.data.data?.carts)) {
-                const total = res.data.data.carts.reduce((sum, item) => sum + (item.qty || 0), 0);
-                setCartCount(total);
-            } else {
-                setCartCount(0);
-            }
-        } catch {
-            setCartCount(0);
-        }
-    }
-
-    useEffect(() => { fetchCart(); }, []);
+    useEffect(() => {
+        dispatch(fetchCart());
+    }, [dispatch]);
 
     // 進站時預載產品列表（供首頁、商品頁使用）
     useEffect(() => {
@@ -64,10 +53,10 @@ export default function MainLayout({
     }, [dispatch]);
 
     useEffect(() => {
-        const onCartUpdated = () => fetchCart();
+        const onCartUpdated = () => dispatch(fetchCart());
         window.addEventListener(EVENT_CART_UPDATED, onCartUpdated);
         return () => window.removeEventListener(EVENT_CART_UPDATED, onCartUpdated);
-    }, []);
+    }, [dispatch]);
 
     // 從手機版切回桌機版時關閉手機選單（Tailwind md = 768px）
     useEffect(() => {
@@ -131,7 +120,7 @@ export default function MainLayout({
                     </div>
 
                     {/* 吐司彈窗：由 Redux storefrontToast 顯示 */}
-                    <div className="absolute -bottom-[120px] right-4 z-50">
+                    <div className="absolute -bottom-[300px] right-4 z-50">
                         <StorefrontToast />
                     </div>
 

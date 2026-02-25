@@ -72,14 +72,16 @@ export default function EditPanel({
 
     const btnLight = "mx-1 rounded px-2 py-1 font-semibold cursor-pointer bg-slate-200 text-slate-800 border-none hover:bg-sky-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:font-normal disabled:hover:bg-slate-200";
     const inputBase = "w-full py-2 px-3 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-slate-200";
+ 
+
 
     return (
-        <div className="h-screen w-[400px] flex-col-between gap-2 overflow-x-auto p-4 bg-admin-card-edit tablet:rounded-md">
+        <div className="h-fit xl:h-screen w-[600px] xl:w-[400px] flex-col-between gap-2 overflow-x-auto p-4 bg-admin-card-edit tablet:rounded-md">
             <div className="h-full w-full flex flex-col gap-4">
                 <div className="flex flex-col gap-4 justify-between">
-                    <div className="flex flex-col gap-2 max-[1080px]:w-full">
+                    <div className="flex flex-col gap-2 w-full">
                         <div className="flex flex-row items-center gap-1">
-                            <label htmlFor="title" className="text-xs min-w-6">品名</label>
+                            <label htmlFor="title" className="text-xs min-w-8">品名</label>
                             <input
                                 id="title"
                                 type="text"
@@ -91,7 +93,7 @@ export default function EditPanel({
                             />
                         </div>
                         <div className="flex flex-row items-center gap-1">
-                            <label htmlFor="sub_title" className="text-xs min-w-6">副標</label>
+                            <label htmlFor="sub_title" className="text-xs min-w-8">副標</label>
                             <input
                                 id="sub_title"
                                 type="text"
@@ -103,7 +105,7 @@ export default function EditPanel({
                             />
                         </div>
                         <div className="flex flex-row items-center gap-1">
-                            <label htmlFor="content" className="text-xs min-w-6">規格</label>
+                            <label htmlFor="content" className="text-xs min-w-8">規格</label>
                             <input
                                 id="content"
                                 type="text"
@@ -115,7 +117,7 @@ export default function EditPanel({
                             />
                         </div>
                         <div className="flex flex-row items-center gap-1">
-                            <label htmlFor="description" className="text-xs min-w-6">描述</label>
+                            <label htmlFor="description" className="text-xs min-w-8">描述</label>
                             <input
                                 id="description"
                                 type="text"
@@ -130,24 +132,24 @@ export default function EditPanel({
                     <div className="flex justify-between items-end gap-4 max-[640px]:flex-col">
                         <div className="flex flex-col gap-2 max-[1080px]:w-full">
                             <div className="flex flex-row items-center gap-1">
-                                <label htmlFor="is_enabled" className="text-xs min-w-6">是否<br />啟用</label>
+                                <label htmlFor="is_enabled" className="text-xs min-w-8">是否<br/>啟用</label>
                                 <button
                                     type="button"
-                                    className={`${btnLight} ${editingProductIsEnabled === 1 ? "!bg-sky-700 !text-slate-100" : ""}`}
+                                    className={`btn-select px-2 py-1 whitespace-nowrap ${editingProductIsEnabled === 1 ? "active" : ""}`}
                                     onClick={() => setEditingProductIsEnabled(1)}
                                 >
                                     上架
                                 </button>
                                 <button
                                     type="button"
-                                    className={`${btnLight} ${editingProductIsEnabled === 1 ? "" : "!bg-sky-700 !text-slate-100"}`}
+                                    className={`btn-select px-2 py-1 whitespace-nowrap ${editingProductIsEnabled === 1 ? "" : "active"}`}
                                     onClick={() => setEditingProductIsEnabled(0)}
                                 >
                                     隱藏
                                 </button>
                             </div>
                             <div className="flex flex-row items-center gap-1">
-                                <label htmlFor="origin_price" className="text-xs min-w-6">原價</label>
+                                <label htmlFor="origin_price" className="text-xs min-w-8">原價</label>
                                 <input
                                     id="origin_price"
                                     type="number"
@@ -160,7 +162,7 @@ export default function EditPanel({
                                 />
                             </div>
                             <div className="flex flex-row items-center gap-1">
-                                <label htmlFor="price" className="text-xs min-w-6">售價</label>
+                                <label htmlFor="price" className="text-xs min-w-8">售價</label>
                                 <input
                                     id="price"
                                     type="number"
@@ -175,7 +177,19 @@ export default function EditPanel({
                         </div>
                         <div className="flex flex-col gap-2 max-[1080px]:w-full">
                             <div className="flex flex-row items-center gap-1">
-                                <label htmlFor="category" className="text-xs min-w-6">分類</label>
+                                <label htmlFor="category" className="text-xs min-w-8">更新<br/>時間 </label>
+                                <input
+                                    id="updated_at"
+                                    type="text"
+                                    placeholder="請輸入更新時間"
+                                    name="updated_at"
+                                    value={editingProduct.updated_at}
+                                    onChange={(e) => eventHandlereditingProduct(e)}
+                                    className={inputBase}
+                                />
+                            </div>
+                            <div className="flex flex-row items-center gap-1">
+                                <label htmlFor="category" className="text-xs min-w-8">分類</label>
                                 <input
                                     id="category"
                                     type="text"
@@ -187,7 +201,7 @@ export default function EditPanel({
                                 />
                             </div>
                             <div className="flex flex-row items-center gap-1">
-                                <label htmlFor="stock" className="text-xs min-w-6">庫存</label>
+                                <label htmlFor="stock" className="text-xs min-w-8">庫存</label>
                                 <input
                                     id="stock"
                                     type="number"
@@ -296,14 +310,16 @@ export default function EditPanel({
                     <div className="flex justify-between">
                         <button
                             type="button"
-                            className={`${btnLight} ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                            className="admin-btn-muted"
+                            disabled={uploading}
                             onClick={() => { resetEditingProduct(); setMod("view"); setFocus({}); }}
                         >
-                            {mod === "update" ? "取消編輯（產品不會儲存）" : "取消新增（產品不會儲存）"}
+                            {mod === "update" ? "取消編輯（不會儲存）" : "取消新增（不會儲存）"}
                         </button>
                         <button
                             type="button"
-                            className={`rounded px-2 py-1 bg-sky-700 text-slate-100 border-none cursor-pointer hover:bg-sky-600 ${uploading ? "opacity-50 cursor-not-allowed" : ""}`}
+                            className="admin-btn-primary"
+                            disabled={uploading}
                             onClick={() => uploadProduct(mod)}
                         >
                             {uploading
