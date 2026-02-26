@@ -21,12 +21,12 @@ export default function Hero() {
 
                     <div className="">
                         <h1 className="leading-[1.2]">
-                            <span className="text-2xl      max-mobile:absolute max-mobile:top-[30%] max-mobile:left-4 ">探索屬於你的</span><br className="hidden md:block"/>
-                            <span className="md:text-primary  max-mobile:absolute max-mobile:top-[60%] max-mobile:right-4 ">優雅綠意</span>
+                            <span className="text-2xl      mobile:absolute mobile:top-[30%] mobile:left-4 ">探索屬於你的</span><br className="hidden md:block"/>
+                            <span className="md:text-primary  mobile:absolute mobile:top-[60%] mobile:right-4 ">優雅綠意</span>
                         </h1>
-                        <div className="max-mobile:absolute max-mobile:bottom-4 max-mobile:left-1/2 max-mobile:-translate-x-1/2
+                        <div className="mobile:absolute mobile:bottom-4 mobile:left-1/2 mobile:-translate-x-1/2
                                         flex flex-col gap-12">
-                            <p className="max-mobile:w-[50vw] ">
+                            <p className="mobile:w-[50vw] ">
                             <span className="hidden md:block">讓牆面成為你的垂直花園，<br/></span>
                             嚴選每一株姿態，讓手工上板的鹿角蕨，<br className="hidden md:block"/>
                             展現不需張揚的高雅品味。
