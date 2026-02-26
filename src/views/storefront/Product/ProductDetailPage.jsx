@@ -16,26 +16,43 @@ export default function ProductDetailPage() {
   const params = useParams();
   const [product, setProduct] = useState({});
   const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
   async function getProduct() {
-      try {            
-          const res = await axios.get (`${VITE_API_URL}/api/${VITE_API_PATH}/product/${params.id}`);
-
-          if (res.data.product) {
-              setProduct(res.data.product);
-              setImages([res.data.product.imageUrl, ...res.data.product.imagesUrl]);
-          } else {
-              setProduct({});
-          }
-      } catch (error) {
-          setProduct({}); 
+    if (!params.id) {
+      setNotFound(true);
+      setProduct({});
+      setImages([]);
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(true);
+    setNotFound(false);
+    try {
+      const res = await axios.get(`${VITE_API_URL}/api/${VITE_API_PATH}/product/${params.id}`);
+      if (res.data.product) {
+        setProduct(res.data.product);
+        setImages([res.data.product.imageUrl, ...(res.data.product.imagesUrl || [])]);
+        setNotFound(false);
+        setSelectedImage(0);
+      } else {
+        setNotFound(true);
+        setProduct({});
+        setImages([]);
       }
+    } catch {
+      setNotFound(true);
+      setProduct({});
+      setImages([]);
+    } finally {
+      setIsLoading(false);
+    }
   }
-  
 
   useEffect(() => {
     getProduct();
-  }, []);
+  }, [params.id]);
 
 
   const Q = 5;
@@ -96,6 +113,22 @@ export default function ProductDetailPage() {
 
 
 
+  if (isLoading) {
+    return (
+      <div className="h-[calc(100vh-220px)] flex-1 flex-col-center-center ">
+        載入中…
+      </div>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <div className="h-[calc(100vh-220px)] flex-1 flex-col-center-center">
+        <p className="text-muted">找不到該商品，請檢查網址或返回商品列表。</p>
+      </div>
+    );
+  }
+
   return (
     <div className="md:px-8">
 
@@ -114,7 +147,7 @@ export default function ProductDetailPage() {
           <div className="flex justify-between gap-2 
                           md:flex-col md:w-1/4">
               {images.map((img, index) => (
-                <button onClick={() => setSelectedImage(index)}
+                <button key={index} onClick={() => setSelectedImage(index)}
                         className={`w-1/4 aspect-[4/3] rounded-md overflow-hidden bg-placeholder hover:opacity-75 
                                     md:w-full 
                                     ${selectedImage === index ? 'opacity-100' : 'opacity-50'}`}>
