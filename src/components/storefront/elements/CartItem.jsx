@@ -49,7 +49,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
 
         <div className="flex items-center justify-between md:contents px-4">
           <div className="flex items-center justify-between md:contents">
-            <span className="text-sm text-muted md:text-center md:justify-self-center">${price}</span>
+            <span className="text-sm text-muted md:text-center md:justify-self-center">${price.toLocaleString()}</span>
           </div>
           <span className="text-sm text-muted block md:hidden">×</span>
 
@@ -70,7 +70,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
           <span className="text-sm text-muted block md:hidden">=</span>
           <div className="flex items-center justify-between md:contents">
             <span className="text-base font-bold text-default md:text-center md:justify-self-center">
-              ${price * quantity}
+              ${(price * quantity).toLocaleString()}
             </span>
           </div>
 

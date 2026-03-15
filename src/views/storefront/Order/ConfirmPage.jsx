@@ -252,6 +252,7 @@ export default function ConfirmPage({
                             {...register('orderer.phone', {
                                 required: '訂購人電話為必填',
                                 minLength: { value: 9, message: '電話請超過 8 碼' },
+                                pattern: { value: /^\d+$/, message: '電話請輸入數字' },
                             })}
                         />
                     </div>
@@ -428,6 +429,7 @@ export default function ConfirmPage({
                                 {...register('shipping.phone', {
                                     required: '電話為必填',
                                     minLength: { value: 9, message: '電話請超過 8 碼' },
+                                    pattern: { value: /^\d+$/, message: '電話請輸入數字' },
                                 })}
                             />
                         </div>
@@ -542,7 +544,7 @@ export default function ConfirmPage({
                     </label>
 
                     {appliedDiscount > 0 && (
-                        <p className="text-sm text-primary">已套用折扣，折抵 $NT {appliedDiscount} <br/>每筆訂單只能使用一次折扣碼</p>
+                        <p className="text-sm text-primary">已套用折扣，折抵 $NT {appliedDiscount.toLocaleString()} <br/>每筆訂單只能使用一次折扣碼</p>
                     )}
 
 

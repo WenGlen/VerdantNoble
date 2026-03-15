@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 
@@ -85,6 +85,15 @@ export default function ProductDetailPage() {
 
 
 
+  // 解析 care JSON 字串 → 陣列
+  const care = useMemo(() => {
+    if (Array.isArray(product.care)) return product.care;
+    if (typeof product.care === 'string' && product.care.trim()) {
+      try { return JSON.parse(product.care); } catch { return []; }
+    }
+    return [];
+  }, [product.care]);
+
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(1);
@@ -136,23 +145,23 @@ export default function ProductDetailPage() {
       <section className="pb-8 md:pt-8">
 
         {/*產品圖片*/}
-        <div className="w-full max-h-[600px] flex flex-col gap-4
+        <div className="w-full max-h-[600px] overflow-hidden flex flex-col gap-4
                         md:flex-row-reverse ">
 
-          <div className="w-full  bg-placeholder rounded-md overflow-hidden">
+          <div className="w-full aspect-[4/3] bg-placeholder rounded-md overflow-hidden">
             <img src={images[selectedImage]} alt={`Product Image ${selectedImage + 1}`} 
-                 className="w-full h-full object-cover" />
+                 className="block w-full h-full object-cover" />
           </div>
           
           <div className="flex justify-between gap-2 
                           md:flex-col md:w-1/4">
               {images.map((img, index) => (
                 <button key={index} onClick={() => setSelectedImage(index)}
-                        className={`w-1/4 aspect-[4/3] rounded-md overflow-hidden bg-placeholder hover:opacity-75 
+                        className={`p-0 w-1/4 aspect-[4/3] rounded-md overflow-hidden bg-placeholder hover:opacity-75 
                                     md:w-full 
                                     ${selectedImage === index ? 'opacity-100' : 'opacity-50'}`}>
                   <img src={img} alt={`Product Image ${index + 1}`} 
-                       className="w-full h-full object-cover" />
+                       className="block w-full h-full object-cover" />
                 </button>
               ))}
           </div>
@@ -208,20 +217,34 @@ export default function ProductDetailPage() {
         </div>
       </section>
 
-      <section>
-        <div className="max-w-screen-md mx-auto flex flex-col gap-8 py-12">
-          <div className="p-8">
-          <p className="text-sm text-muted">(未來會升級內容，有簡單的文字段落，但這邊先不處理)</p>
+      <section className="px-8">
+        <div className="max-w-[640px] mx-auto flex flex-col gap-8 py-12">
+          {product.content && (
+            <div className="text-md text-primary font-bold font-serif whitespace-pre-wrap">
+              {product.content}
+            </div>
+          )}
+          <div className="text-md  whitespace-pre-wrap">
           {product.description}
           </div>
-          <CareTipsSection title="養護重點" care={product.care} />
-
+          {product.story && (
+            <div className="text-md whitespace-pre-wrap">
+              <p className="text-secondary font-bold">綠爵故事</p>
+              {product.story}
+            </div>
+          )}
         </div>
-
-
-
-
       </section>
+
+
+
+      {care.length > 0 && (
+        <section className="md:px-8">
+          <div className="max-w-screen-md mx-auto py-8">
+            <CareTipsSection title="養護重點" care={care} />
+          </div>
+        </section>
+      )}
 
     </div>
   );

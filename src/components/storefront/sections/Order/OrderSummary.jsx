@@ -17,8 +17,8 @@ export default function OrderSummary({
                         <p className="text-md font-bold font-serif">{item.name}</p>
                     </div>
                     <div className="text-right">
-                        <p className="text-xs text-muted">$NT {item.price} × {item.quantity}</p>
-                        <p className="text-sm font-bold">$NT {item.price * item.quantity}</p>
+                        <p className="text-xs text-muted">$NT {item.price.toLocaleString()} × {item.quantity}</p>
+                        <p className="text-sm font-bold">$NT {(item.price * item.quantity).toLocaleString()}</p>
                     </div>
 
                 </div>
@@ -28,12 +28,12 @@ export default function OrderSummary({
 
                 <div className="w-full flex flex-row justify-between">
                     <p>小計</p>
-                    <p>$NT<span className="font-bold text-textDefaultColor"> {items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</span></p>
+                    <p>$NT<span className="font-bold text-textDefaultColor"> {items.reduce((acc, item) => acc + item.price * item.quantity, 0).toLocaleString()}</span></p>
                 </div>
                 <div className="w-full flex flex-row justify-between">
                     <p>運費</p>
                     {freight > 0 ? (
-                    <p>$NT<span className="font-bold text-textDefaultColor"> + {freight}</span></p>
+                    <p>$NT<span className="font-bold text-textDefaultColor"> + {freight.toLocaleString()}</span></p>
                     ):(
                     <p>免運費</p>
                     )}
@@ -41,12 +41,12 @@ export default function OrderSummary({
                 {discount > 0 && (
                 <div className="w-full flex flex-row justify-between text-muted">
                     <p>折扣</p>
-                    <p>$NT<span className="font-bold text-textDefaultColor"> - {discount}</span></p>
+                    <p>$NT<span className="font-bold text-textDefaultColor"> - {discount.toLocaleString()}</span></p>
                 </div>
                  )}
                 <div className="w-full flex flex-row justify-between">
                     <p>總計</p>
-                    <p className="text-md font-bold text-primary">$NT {items.reduce((acc, item) => acc + item.price * item.quantity, 0) + freight - discount}</p>
+                    <p className="text-md font-bold text-primary">$NT {(items.reduce((acc, item) => acc + item.price * item.quantity, 0) + freight - discount).toLocaleString()}</p>
                 </div>
             </div>
 

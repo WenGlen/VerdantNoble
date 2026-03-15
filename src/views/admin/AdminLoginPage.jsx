@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +15,26 @@ const EMAIL_PATTERN = {
 export default function AdminLoginPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  // ====== 進入登入頁時先檢查是否已登入 ======
+  async function checkLogin() {
+    try {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('GlenToken='))
+        ?.split('=')[1];
+      if (!token) return;
+      axios.defaults.headers.common['Authorization'] = token;
+      await axios.post(`${VITE_API_URL}/api/user/check`);
+      navigate('/admin/ProductsManagement', { replace: true });
+    } catch {
+      // token 無效，留在登入頁
+    }
+  }
+
+  useEffect(() => {
+    checkLogin();
+  }, []);
 
   // React Hook Form
   const {

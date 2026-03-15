@@ -43,7 +43,7 @@ export default function CartPage({
             ))}
             <div className="grid grid-cols-[1fr_4fr] text-sm text-muted items-center px-8">
               <span className="">總計</span>
-              <span className="text-lg font-bold text-primary text-right">$NT {items.reduce((acc, item) => acc + item.price * item.quantity, 0)}</span>
+              <span className="text-lg font-bold text-primary text-right">$NT {items.reduce((acc, item) => acc + item.price * item.quantity, 0).toLocaleString()}</span>
             </div>
           </div>
           )}

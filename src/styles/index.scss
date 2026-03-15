@@ -131,8 +131,8 @@
   --color-admin-btn: hsl(200, 20%, 30%);
   --color-admin-btn-hover: hsl(200, 20%, 40%);
 
-  --color-admin-btn-muted: hsl(200, 20%, 90%);
-  --color-admin-btn-muted-hover: hsl(200, 30%, 85%);
+  --color-admin-btn-muted: hsl(200, 20%, 85%);
+  --color-admin-btn-muted-hover: hsl(200, 30%, 80%);
   --color-admin-btn-warning: hsl(20, 60%, 40%);
   --color-admin-btn-warning-hover: hsl(20, 60%, 30%);
 
@@ -218,9 +218,13 @@
   }
   &-secondary {
     background: var(--color-admin-secondary);
-    color: var(--color-admin-text-invert);
+    color: var(--color-admin-text);
     &:hover {
       background: var(--color-admin-secondary-hover);
+    }
+    &.active {
+      background: var(--color-admin-primary);
+      color: var(--color-admin-text-invert);
     }
   }
 
@@ -230,11 +234,59 @@
       background: var(--color-admin-btn-muted-hover);
     }
   }
+
   &-warning {
     background: var(--color-admin-btn-warning);
     color: var(--color-admin-text-invert);
     &:hover {
       background: var(--color-admin-btn-warning-hover);
+    }
+  }
+
+  &-light {
+    margin: 0 4px;
+    min-width: fit-content;
+    padding: 0px 12px;
+    font-size: 14px;
+    background: var(--color-admin-btn-muted);
+    color: var(--color-admin-text);
+
+    &:hover {
+      background: var(--color-admin-btn-muted-hover);   
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      font-weight: 400;
+      &:hover {
+        background: var(--color-admin-secondary);
+      }
+    }
+  }
+
+  &-icon {
+    padding: 0px 8px;
+    width: fit-content;
+    height: fit-content;
+    min-height: 24px;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.8;
+  
+    &:hover {
+      transition: opacity 0.2s;
+      opacity: 1;
+      background: var(--color-admin-card-50);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      &:hover {
+        opacity: 0.4;
+        background: transparent;
+      }
     }
   }
 }
@@ -613,6 +665,12 @@ button{
     transform: translateY(-4px);
   }
 }
+
+
+
+//==========================================
+// Article Content Styles
+//==========================================
 
 
 

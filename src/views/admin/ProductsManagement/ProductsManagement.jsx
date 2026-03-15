@@ -6,9 +6,9 @@ const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 
 import { createAsyncDashboardToast } from '../../../slices/DashboardToastSlice';
 import ModButton from '../../../components/admin/elements/ModButton';
-import FoucsPanel from '../../../components/admin/panels/FoucsPanel';
-import EditPanel from '../../../components/admin/panels/EditPanel';
-import ProductsList from '../../../components/admin/panels/ProductsList';
+import FoucsPanel from '../../../components/admin/panels/product/FoucsPanel';
+import EditPanel from '../../../components/admin/panels/product/EditPanel';
+import ProductsList from '../../../components/admin/panels/product/ProductsList';
 
 export default function ProductsManagement() {
     const [mod, setMod] = useState("view");
@@ -124,6 +124,14 @@ export default function ProductsManagement() {
     const [editingProductIsEnabled, setEditingProductIsEnabled] = useState(1);
     const [editingProduct, setEditingProduct] = useState({});
 
+    function parseCare(value) {
+        if (Array.isArray(value)) return value;
+        if (typeof value === 'string' && value.trim()) {
+            try { return JSON.parse(value); } catch { return []; }
+        }
+        return [];
+    }
+
     function resetEditingProduct() {
         setEditingProduct({
             title: "",
@@ -136,7 +144,10 @@ export default function ProductsManagement() {
             unit: "",
             description: "",
             content: "",
+            story: "",
             is_enabled: 1,
+            is_featured: false,
+            care: [],
             imageUrl: "",
             imageUrl1: "",
             imageUrl2: "",
@@ -175,7 +186,10 @@ export default function ProductsManagement() {
             unit: item.unit || "個",
             description: item.description || "",
             content: item.content || "",
+            story: item.story || "",
             is_enabled: item.is_enabled !== undefined ? item.is_enabled : 1,
+            is_featured: item.is_featured === true,
+            care: parseCare(item.care),
             imageUrl: item.imageUrl || "",
             imageUrl1: item.imageUrl1 || "",
             imageUrl2: item.imageUrl2 || "",
@@ -211,43 +225,55 @@ export default function ProductsManagement() {
             }
             getProducts();
         } catch (error) {
-            dispatch(createAsyncDashboardToast( error.response.data ));
-            dispatch(createAsyncDashboardToast({message: "上傳產品失敗", success: false}));
+            const apiMessage = error.response?.data?.message;
+            setInputError(apiMessage || "上傳產品失敗，請稍後再試");
+            dispatch(createAsyncDashboardToast( error.response?.data ?? { message: "上傳產品失敗", success: false } ));
         } finally {
             setUploading(false);
         }
-        setUploading(false);
     }
 
     const [inputError, setInputError] = useState("");
-    const errorType = {
-        empty: "有漏填資訊，請完整填寫",
-        notNumber: "原價、售價、庫存請填寫純數字",
-        negative: "原價、售價、庫存當中有負數資訊",
-        discontError: "原價不能小於售價",
+
+    const REQUIRED_FIELD_LABELS = {
+        title: '品名',
+        category: '分類',
+        updated_at: '更新日期',
+        unit: '單位',
+        description: '描述',
+        content: '規格說明',
+        imageUrl: '主要圖片',
     };
 
     function checkInputError() {
-        const excludeFields = ['sub_title', 'origin_price', 'price', 'stock', 'soldQuantity', 'imageUrl1', 'imageUrl2', 'imageUrl3', 'imageUrl4', 'imageUrl5'];
-        for (const [key, value] of Object.entries(editingProduct)) {
-            if (excludeFields.includes(key)) continue;
-            if (value === "") return errorType.empty;
+        for (const [key, label] of Object.entries(REQUIRED_FIELD_LABELS)) {
+            if (!editingProduct[key] || editingProduct[key] === "") {
+                return `「${label}」為必填欄位，請完整填寫`;
+            }
         }
         if (typeof editingProduct.origin_price !== "number" || typeof editingProduct.price !== "number" || typeof editingProduct.stock !== "number" || typeof editingProduct.soldQuantity !== "number") {
-            return errorType.notNumber;
+            return "原價、售價、庫存請填寫純數字";
         }
         if (editingProduct.origin_price < 0 || editingProduct.price < 0 || editingProduct.stock < 0 || editingProduct.soldQuantity < 0) {
-            return errorType.negative;
+            return "原價、售價、庫存當中有負數資訊";
         }
         if (editingProduct.origin_price < editingProduct.price) {
-            return errorType.discontError;
+            return "原價不能小於售價";
         }
         return "";
+    }
+
+    function setEditingProductCare(newCare) {
+        setEditingProduct(prev => ({ ...prev, care: newCare }));
     }
 
     function prepareProductData(product, isEnabled) {
         const productCopy = { ...product };
         productCopy.is_enabled = isEnabled;
+        // 序列化 care：三個項目全空則存 []，否則存完整陣列
+        const careArray = Array.isArray(productCopy.care) ? productCopy.care : [];
+        const careHasContent = careArray.some(t => t.title?.trim() || t.description?.trim());
+        productCopy.care = JSON.stringify(careHasContent ? careArray : []);
         const imagesUrlArray = [
             productCopy.imageUrl1,
             productCopy.imageUrl2,
@@ -265,7 +291,6 @@ export default function ProductsManagement() {
     useEffect(() => {
         function handleResize() {
             setWindowWidth(window.innerWidth);
-            //console.log(window.innerWidth);
         }
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -319,6 +344,7 @@ export default function ProductsManagement() {
                                         editingProductIsEnabled={editingProductIsEnabled}
                                         setEditingProductIsEnabled={setEditingProductIsEnabled}
                                         eventHandlereditingProduct={eventHandlereditingProduct}
+                                        setEditingProductCare={setEditingProductCare}
                                         mod={mod}
                                         setMod={setMod}
                                         setFocus={setFocus}

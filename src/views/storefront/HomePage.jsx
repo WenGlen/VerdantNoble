@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -8,16 +8,29 @@ import Features from '../../components/storefront/sections/Home/Features';
 
 import ProductCard from '../../components/storefront/elements/ProductCard';
 import { addToCartWithStockCheck } from '../../slices/cartSlice';
+import { fetchProducts } from '../../slices/productsSlice';
 
 export default function HomePage() {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.products.list ?? []);
 
-  // 精品、價位前四高
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  // 依後台設定的精選排序（is_featured 1~4）顯示商品，有幾個顯示幾個
   const topFourProducts = useMemo(() => {
     return [...list]
-      .filter((product) => product.category === '精品')
-      .sort((a, b) => (b.price || 0) - (a.price || 0))
+      .filter((p) => {
+        const val = p.is_featured;
+        // 相容舊 boolean 格式與新 number 格式
+        return (typeof val === 'number' && val >= 1) || val === true;
+      })
+      .sort((a, b) => {
+        const aVal = typeof a.is_featured === 'number' ? a.is_featured : 1;
+        const bVal = typeof b.is_featured === 'number' ? b.is_featured : 1;
+        return aVal - bVal;
+      })
       .slice(0, 4);
   }, [list]);
 
@@ -47,14 +60,16 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="flex flex-wrap justify-center gap-6">
             {topFourProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                {...product}
-                usedOnPage="home"
-                onAddToCart={handleAddToCart}
-              />
+              <Link key={product.id} to={`/product/${product.id}`} >
+                <ProductCard
+                  key={product.id}
+                  {...product}
+                  usedOnPage="home"
+                  onAddToCart={handleAddToCart}
+                />
+               </Link>
             ))}
           </div>
         </section>

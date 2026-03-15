@@ -5,6 +5,7 @@ export default function ProductCard({
   origin_price,
   price,
   sub_title,
+  is_featured,
   usedOnPage,
   onAddToCart,
   stock,
@@ -17,7 +18,7 @@ export default function ProductCard({
   };
 
   return (
-    <div className={`${usedOnPage === 'home' ? '' : 'w-full'}
+    <div className={`${usedOnPage === 'home' ? 'w-[calc(50%-12px)] md:w-56' : 'w-full'}
                     flex-col-start gap-2 hover:translate-y-[-6px] transition-all duration-200`}>
       {/* 圖片區域 */}
       <div className={`relative w-full
@@ -32,6 +33,11 @@ export default function ProductCard({
           <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 rounded-md flex items-center justify-center text-gray-500">
             <span>🌿</span>
           </div>
+        )}
+        {is_featured && usedOnPage === 'products' && (
+          <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-primary text-white tracking-wide">
+            精選
+          </span>
         )}
       </div>
 

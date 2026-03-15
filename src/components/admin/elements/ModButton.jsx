@@ -10,14 +10,16 @@ export default function ModButton({
     targetId,
     onCancel,
     onConfirmDelete,
-    deleteing
+    deleteing,
+    label,
+    loadingLabel,
 }) {
     const typeText = {
         view: "查看",
         update: "修改",
         delete: "刪除",
-        add: "新增產品",
-        get: "重新取得產品列表",
+        add: label || "新增產品",
+        get: label || "重新取得產品列表",
     };
 
     const typeImage = {
@@ -28,11 +30,11 @@ export default function ModButton({
 
     function buttonContent() {
         if (type === "get" && mod === "get") {
-            return "產品列表更新時中...";
+            return loadingLabel || "列表更新中...";
         } else if (type === "get" && (mod === "add" || mod === "update" || mod === "delete")) {
-            return "目前無法更新產品列表";
+            return "目前無法更新列表";
         } else if (type === "add" && mod === "add") {
-            return "新增產品中...";
+            return loadingLabel || "新增中...";
         } else if (typeImage[type]) {
             return <img src={typeImage[type]} alt={typeText[type]} className="w-4 h-4 align-middle" />;
         } else {

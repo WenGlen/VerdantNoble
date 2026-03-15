@@ -51,13 +51,13 @@ const storefrontPages = {
 
     headerNav:[
         { path: "products", element: <ProductsPage />, title:'挑選綠蕨'  },
-        { path: "articles", element: <ArticlesPage />, title: '綠蕨故事' },
+        { path: "articles", element: <ArticlesPage />, title: '綠爵養護' },
         { path: "about", element: <AboutPage />, title: '關於我們' },
         { path: "contact", element: <ContactPage />, title: '聯絡我們' },
     ],
     details:[
         { path: "product/:id", element: <ProductDetailPage />, title: '商品詳情' },
-        { path: "articles/:slug", element: <ArticleDetailPage />, title: '文章' },
+        { path: "articles/:id", element: <ArticleDetailPage />, title: '文章' },
     ],
     footerNav:[
         { path: "faq", element: <FAQPage />, title: '常見問題' },

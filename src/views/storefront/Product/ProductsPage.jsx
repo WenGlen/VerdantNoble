@@ -44,7 +44,7 @@ export default function ProductsPage() {
     <div className="px-8">
       {/* Banner */}
       <section className="banner
-                        py-12 flex-col gap-8 border-b border-border-50">
+                        py-12 flex flex-col gap-4 border-b border-border-50">
         <div>
           <h1>挑選你的<span className="text-primary"> 綠蕨飾</span></h1>
           <p>探索我們精心挑選的鹿角蕨系列</p>
@@ -64,27 +64,17 @@ export default function ProductsPage() {
             </button>
           ))}
         </div>
+
+        <div>
+          <span className="">
+            {loading ? '載入中…' : `此分類 ${filteredProducts.length} 項商品`}
+          </span>
+        </div>
+
       </section>
 
-      <div>
-        <section>
-          <div className="flex-row-between-center mt-12 py-4">
-            <span className="">
-              {loading ? '載入中…' : `此分類 ${filteredProducts.length} 項商品`}
-            </span>
-            <div>
-              <span>排序方式（功能還沒做）：</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="newest">最新上架</option>
-                <option value="price-low">價格：低到高</option>
-                <option value="price-high">價格：高到低</option>
-              </select>
-            </div>
-          </div>
-        </section>
+      <div className="py-8">
+
 
         <section>
           <div /*product-card-grid*/ className="grid gap-12

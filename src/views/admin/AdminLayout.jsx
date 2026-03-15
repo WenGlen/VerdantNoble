@@ -10,32 +10,30 @@ import LogoutIcon from '../../img/Logout.png';
 
 export default function AdminLayout({ adminPagesItems = [] }) {
 
+    // 所有 Hook 必須在條件式 return 之前呼叫
+    const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [hasCheckedAuth, setHasCheckedAuth] = useState(false);
 
     useEffect(() => {
-        setAuthToken();
-    }, []);
-
-    function setAuthToken() {
-        const token = document.cookie.replace(
-            /(?:(?:^|.*;\s*)GlenToken\s*=\s*([^;]*).*$)|^.*$/,
-            "$1"
-        );
+        const token = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('GlenToken='))
+            ?.split('=')[1];
         if (token) {
             axios.defaults.headers.common['Authorization'] = token;
             setIsLoggedIn(true);
         } else {
             setIsLoggedIn(false);
         }
-    }
-
-    useEffect(() => {
-        const row = document.cookie.split('; ').find(row => row.startsWith('GlenToken='));
-        const token = row ? row.split('=')[1] : null;
-        setIsLoggedIn(!!token);
         setHasCheckedAuth(true);
     }, []);
+
+    function handleLogout() {
+        document.cookie = 'GlenToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        delete axios.defaults.headers.common['Authorization'];
+        setIsLoggedIn(false);
+    }
 
     if (!hasCheckedAuth) {
         return null;
@@ -43,8 +41,6 @@ export default function AdminLayout({ adminPagesItems = [] }) {
     if (!isLoggedIn) {
         return <Navigate to="/login" />;
     }
-
-    const location = useLocation();
 
     return (
         <div className="admin h-screen max-h-screen w-full flex-row-between-center" >
@@ -66,7 +62,7 @@ export default function AdminLayout({ adminPagesItems = [] }) {
                         </div>
                     ))}
                     </div>
-                    <button className="flex-row-start-center gap-2 p-0" onClick={() => setIsLoggedIn(false)}>
+                    <button className="flex-row-start-center gap-2 p-0" onClick={handleLogout}>
                         <img src={LogoutIcon} alt="登出" className="w-6 h-6 opacity-50" />
                         <div className="btn-nav whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all delay-100 duration-300">
                             登出

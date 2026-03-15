@@ -45,7 +45,6 @@ export default function ContactPage() {
   function handleSubmit(e) {
     e.preventDefault();
     // 實際可接後端或 mailto
-    console.log('Contact form:', form);
   }
 
   return (
