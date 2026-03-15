@@ -91,7 +91,7 @@ const adminPages =[
     { path: "ProductsMark", element: <ProductsMark />, title: '商品標籤', icon: ProductsMarkIcon },
     { path: "ArticlesManagement", element: <ArticlesManagement />, title: '文章列表', icon: ArticlesListIcon },
     { path: "ArticlesMark", element: <ArticlesMark />, title: '文章標籤', icon: ArticlesMarkIcon },
-    { path: "OrdersList", element: <OrdersList />, title: '訂單列表', icon: OrdersListIcon },
+    //{ path: "OrdersList", element: <OrdersList />, title: '訂單列表', icon: OrdersListIcon },
 ];
 
 const adminPagesItems = adminPages.map((item) => ({
