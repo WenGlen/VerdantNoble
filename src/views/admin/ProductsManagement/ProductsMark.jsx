@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
@@ -17,9 +17,7 @@ export default function ProductsMark() {
     const [featuredOrder, setFeaturedOrder] = useState([]);
     const dispatch = useDispatch();
 
-    useEffect(() => { loadProducts(); }, []);
-
-    async function loadProducts() {
+    const loadProducts = useCallback(async () => {
         setLoading(true);
         try {
             const res = await axios.get(`${VITE_API_URL}/api/${VITE_API_PATH}/admin/products/all`);
@@ -46,7 +44,11 @@ export default function ProductsMark() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [dispatch]);
+
+    useEffect(() => {
+        loadProducts();
+    }, [loadProducts]);
 
     // ── 計算是否有未儲存的變更 ──────────────────────────────
     const hasChanges = products.some(p => {

@@ -75,8 +75,10 @@ export default function ArticleDetailPage() {
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    setNotFound(false);
+    queueMicrotask(() => {
+      setLoading(true);
+      setNotFound(false);
+    });
     getArticleById(id)
       .then((res) => {
         const data = res.data?.article;
@@ -89,7 +91,7 @@ export default function ArticleDetailPage() {
 
   useEffect(() => {
     if (!productsList.length) dispatch(fetchProducts());
-  }, []);
+  }, [dispatch, productsList.length]);
 
   if (loading) {
     return (

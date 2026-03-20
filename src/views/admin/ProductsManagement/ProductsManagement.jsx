@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
@@ -10,19 +10,83 @@ import FoucsPanel from '../../../components/admin/panels/product/FoucsPanel';
 import EditPanel from '../../../components/admin/panels/product/EditPanel';
 import ProductsList from '../../../components/admin/panels/product/ProductsList';
 
+/** 先依分類再依品名（中文）排序；純函式，放在元件外避免 useCallback 依賴變動 */
+function sortProductsByCategoryAndTitle(products) {
+    const sortedProducts = [...products];
+    sortedProducts.sort((a, b) => {
+        const categoryA = a.category || '';
+        const categoryB = b.category || '';
+        const categoryCompare = categoryA.localeCompare(categoryB, 'zh-CN', {
+            numeric: true,
+            sensitivity: 'base'
+        });
+        if (categoryCompare === 0) {
+            const titleA = a.title || '';
+            const titleB = b.title || '';
+            return titleA.localeCompare(titleB, 'zh-CN', {
+                numeric: true,
+                sensitivity: 'base'
+            });
+        }
+        return categoryCompare;
+    });
+    return sortedProducts;
+}
+
 export default function ProductsManagement() {
     const [mod, setMod] = useState("view");
     const [products, setProducts] = useState([]);
     const [firstTimeLoading, setFirstTimeLoading] = useState(true);
     const dispatch = useDispatch();
 
-    // ====== 一進入頁面就取得產品列表 ======
-    useEffect(() => {
-        getProducts();
+    const [focus, setFocus] = useState({});
+    const [editingProductIsEnabled, setEditingProductIsEnabled] = useState(1);
+    const [editingProduct, setEditingProduct] = useState({});
+    const [inputError, setInputError] = useState("");
+
+    function parseCare(value) {
+        if (Array.isArray(value)) return value;
+        if (typeof value === 'string' && value.trim()) {
+            try { return JSON.parse(value); } catch { return []; }
+        }
+        return [];
+    }
+
+    const resetEditingProduct = useCallback(() => {
+        setEditingProduct({
+            title: "",
+            sub_title: "",
+            category: "",
+            origin_price: null,
+            price: null,
+            updated_at: "",
+            stock: null,
+            unit: "",
+            description: "",
+            content: "",
+            story: "",
+            is_enabled: 1,
+            is_featured: false,
+            care: [],
+            imageUrl: "",
+            imageUrl1: "",
+            imageUrl2: "",
+            imageUrl3: "",
+            imageUrl4: "",
+            imageUrl5: "",
+            soldQuantity: 0,
+        });
+        setEditingProductIsEnabled(1);
+        setInputError("");
     }, []);
 
-    // ====== 取得產品列表 ======
-    async function getProducts() {
+    useEffect(() => {
+        if (mod === "add") {
+            resetEditingProduct();
+        }
+    }, [mod, resetEditingProduct]);
+
+    const getProducts = useCallback(async () => {
         setMod("get");
         setFocus({});
         try {
@@ -40,52 +104,22 @@ export default function ProductsManagement() {
                 const sortedProducts = sortProductsByCategoryAndTitle(resProducts);
                 setProducts(sortedProducts);
                 setFirstTimeLoading(false);
-                dispatch(createAsyncDashboardToast({message: "成功取得產品列表", success: true}));
+                dispatch(createAsyncDashboardToast({ message: "成功取得產品列表", success: true }));
             } else {
                 setProducts([]);
-                dispatch(createAsyncDashboardToast({message: "取得產品列表失敗", success: false}));
+                dispatch(createAsyncDashboardToast({ message: "取得產品列表失敗", success: false }));
             }
         } catch (error) {
             setProducts([]);
-            dispatch(createAsyncDashboardToast( error.response.data ));
+            dispatch(createAsyncDashboardToast(error.response.data));
         }
         setMod("view");
         resetEditingProduct();
-    }
+    }, [dispatch, resetEditingProduct]);
 
-    // 排序功能：先抓所有分類 categories 做排序，然後每個類別裡用title 做中文字筆畫排序
-    function sortProductsByCategoryAndTitle(products) {
-        const sortedProducts = [...products];
-        sortedProducts.sort((a, b) => {
-            const categoryA = a.category || '';
-            const categoryB = b.category || '';
-            const categoryCompare = categoryA.localeCompare(categoryB, 'zh-CN', {
-                numeric: true,
-                sensitivity: 'base'
-            });
-            if (categoryCompare === 0) {
-                const titleA = a.title || '';
-                const titleB = b.title || '';
-                return titleA.localeCompare(titleB, 'zh-CN', {
-                    numeric: true,
-                    sensitivity: 'base'
-                });
-            }
-            return categoryCompare;
-        });
-        return sortedProducts;
-    }
-
-    // ====== 重置編輯面板 ======
     useEffect(() => {
-        if (mod === "add") {
-            resetEditingProduct();
-        }
-    }, [mod]);
-
-    // ====== 設定焦點產品 ======
-    const [focus, setFocus] = useState({});
-
+        getProducts();
+    }, [getProducts]);
 
     //====== 刪除功能 ======
     const [deleteTargetId, setDeleteTargetId] = useState("");
@@ -118,46 +152,6 @@ export default function ProductsManagement() {
     function handleCancelDelete() {
         setMod("view");
         setDeleteTargetId("");
-    }
-
-    //====== 編輯狀態用 ======
-    const [editingProductIsEnabled, setEditingProductIsEnabled] = useState(1);
-    const [editingProduct, setEditingProduct] = useState({});
-
-    function parseCare(value) {
-        if (Array.isArray(value)) return value;
-        if (typeof value === 'string' && value.trim()) {
-            try { return JSON.parse(value); } catch { return []; }
-        }
-        return [];
-    }
-
-    function resetEditingProduct() {
-        setEditingProduct({
-            title: "",
-            sub_title: "",
-            category: "",
-            origin_price: null,
-            price: null,
-            updated_at: "",
-            stock: null,
-            unit: "",
-            description: "",
-            content: "",
-            story: "",
-            is_enabled: 1,
-            is_featured: false,
-            care: [],
-            imageUrl: "",
-            imageUrl1: "",
-            imageUrl2: "",
-            imageUrl3: "",
-            imageUrl4: "",
-            imageUrl5: "",
-            soldQuantity: 0,
-        });
-        setEditingProductIsEnabled(1);
-        setInputError("");
     }
 
     function eventHandlereditingProduct(e) {
@@ -233,8 +227,6 @@ export default function ProductsManagement() {
         }
     }
 
-    const [inputError, setInputError] = useState("");
-
     const REQUIRED_FIELD_LABELS = {
         title: '品名',
         category: '分類',
@@ -281,7 +273,12 @@ export default function ProductsManagement() {
             productCopy.imageUrl4,
             productCopy.imageUrl5
         ].filter(url => url && url.trim() !== "");
-        const { imageUrl1, imageUrl2, imageUrl3, imageUrl4, imageUrl5, ...productData } = productCopy;
+        const productData = { ...productCopy };
+        delete productData.imageUrl1;
+        delete productData.imageUrl2;
+        delete productData.imageUrl3;
+        delete productData.imageUrl4;
+        delete productData.imageUrl5;
         return { data: { ...productData, imagesUrl: imagesUrlArray } };
     }
 

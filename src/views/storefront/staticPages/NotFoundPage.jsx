@@ -6,10 +6,11 @@ export default function NotFoundPage() {
 
     const navigate = useNavigate();
     useEffect(() => {
-        setTimeout(() => {
-            navigate('/',{replace: true});
+        const t = setTimeout(() => {
+            navigate('/', { replace: true });
         }, 3000);
-    }, []);
+        return () => clearTimeout(t);
+    }, [navigate]);
 
     return (
         <>

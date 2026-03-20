@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { notifyToast } from '../../../api/cart';
+import { persistGlenToken, setAxiosAuthorization } from '../../../utils/adminAuthSideEffects';
 
 const { VITE_API_URL } = import.meta.env;
 
@@ -12,7 +13,7 @@ const EMAIL_PATTERN = {
   message: 'Email 格式不正確',
 };
 
-export default function Login({ url, path, setIsLogIn }) {
+export default function Login({ setIsLogIn }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,10 +37,8 @@ export default function Login({ url, path, setIsLogIn }) {
         password: data.password,
       });
       const { token, expired } = res.data;
-      // 存 cookie
-      document.cookie = `GlenToken=${token};expires=${new Date(expired)};`;
-      // 設定 axios headers
-      axios.defaults.headers.common['Authorization'] = token;
+      persistGlenToken(token, expired);
+      setAxiosAuthorization(token);
       // 通知MainLayout登入成功
       setIsLogIn?.(true);
       // 程式化導航：登入成功後跳轉（取代歷史，避免回到登入頁）
@@ -47,7 +46,7 @@ export default function Login({ url, path, setIsLogIn }) {
       notifyToast('登入成功');
       navigate(from, { replace: true });
 
-    } catch (error) {
+    } catch {
       setFailed(true);
     }
     setLoading(false);

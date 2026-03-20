@@ -42,7 +42,7 @@ export const fetchCart = createAsyncThunk(
 
 export const updateQuantity = createAsyncThunk(
   "cart/updateQuantity",
-  async ({ cartItemId, delta }, { getState, dispatch, rejectWithValue }) => {
+  async ({ cartItemId, delta }, { getState, rejectWithValue }) => {
     const items = getState().cart.items;
     const item = items.find((i) => i.id === cartItemId);
     if (!item) return rejectWithValue("item not found");
@@ -64,7 +64,7 @@ export const updateQuantity = createAsyncThunk(
 
 export const removeItem = createAsyncThunk(
   "cart/removeItem",
-  async (cartItemId, { dispatch, rejectWithValue }) => {
+  async (cartItemId, { rejectWithValue }) => {
     try {
       await removeCartItemApi(cartItemId);
       notifyCartUpdated();

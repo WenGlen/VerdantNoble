@@ -7,10 +7,11 @@ export default function PaymentPage({
 }) {
 
   useEffect(() => {
-    setTimeout(() => {
+    const t = setTimeout(() => {
       setStep(3);
     }, 5000);
-  }, []);
+    return () => clearTimeout(t);
+  }, [setStep]);
 
 
   return (

@@ -17,23 +17,20 @@ export default function ProductsPage() {
   );
 
   const [activeCategory, setActiveCategory] = useState('');
-  const [sortBy, setSortBy] = useState('popularity');
+
+  const resolvedCategory = useMemo(() => {
+    if (!categories.length) return '';
+    if (activeCategory && categories.includes(activeCategory)) return activeCategory;
+    return categories.includes('精品') ? '精品' : categories[0];
+  }, [categories, activeCategory]);
 
   // 進入商品頁時刷新列表
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  // 預設選擇「精品」；若無則選第一個分類
-  useEffect(() => {
-    if (categories.length && !activeCategory) {
-      const defaultCategory = categories.includes('精品') ? '精品' : categories[0];
-      setActiveCategory(defaultCategory);
-    }
-  }, [categories, activeCategory]);
-
-  const filteredProducts = activeCategory
-    ? (list || []).filter((product) => product.category === activeCategory)
+  const filteredProducts = resolvedCategory
+    ? (list || []).filter((product) => product.category === resolvedCategory)
     : list || [];
 
   const handleAddToCart = (productId, qty = 1, stock = null, unit = '') => {
@@ -57,7 +54,7 @@ export default function ProductsPage() {
             <button
               key={category}
               type="button"
-              className={`btn-tag font-serif text-lg tracking-wider ${activeCategory === category ? 'active' : ''}`}
+              className={`btn-tag font-serif text-lg tracking-wider ${resolvedCategory === category ? 'active' : ''}`}
               onClick={() => setActiveCategory(category)}
             >
               {category}

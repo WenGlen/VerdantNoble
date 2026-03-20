@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,14 +31,15 @@ export default function ArticlesManagement() {
     const dispatch = useDispatch();
     const products = useSelector((state) => state.products.list);
 
-    // ====== 一進入頁面就取得文章列表與商品列表 ======
-    useEffect(() => {
-        getArticles();
-        dispatch(fetchProducts());
+    const [editingArticle, setEditingArticle] = useState({ ...DEFAULT_ARTICLE, tag: [], content: [] });
+    const [inputError, setInputError] = useState("");
+
+    const resetEditingArticle = useCallback(() => {
+        setEditingArticle({ ...DEFAULT_ARTICLE, tag: [], content: [], relatedProducts: [] });
+        setInputError("");
     }, []);
 
-    // ====== 取得所有文章（逐頁累積） ======
-    async function getArticles() {
+    const getArticles = useCallback(async () => {
         setMod("get");
         setFocus({});
         try {
@@ -64,20 +65,16 @@ export default function ArticlesManagement() {
         }
         setMod("view");
         resetEditingArticle();
-    }
+    }, [dispatch, resetEditingArticle]);
 
-    // ====== 重置編輯狀態 ======
-    const [editingArticle, setEditingArticle] = useState({ ...DEFAULT_ARTICLE, tag: [], content: [] });
-    const [inputError, setInputError] = useState("");
-
-    function resetEditingArticle() {
-        setEditingArticle({ ...DEFAULT_ARTICLE, tag: [], content: [], relatedProducts: [] });
-        setInputError("");
-    }
+    useEffect(() => {
+        getArticles();
+        dispatch(fetchProducts());
+    }, [dispatch, getArticles]);
 
     useEffect(() => {
         if (mod === "add") resetEditingArticle();
-    }, [mod]);
+    }, [mod, resetEditingArticle]);
 
     // ====== 查看文章（取得完整 content 顯示於 FocusPanel） ======
     async function viewArticle(item) {
@@ -118,7 +115,7 @@ export default function ArticlesManagement() {
                 content: blocks,
                 relatedProducts: Array.isArray(article.relatedProducts) ? [...article.relatedProducts] : [],
             });
-        } catch (error) {
+        } catch {
             dispatch(createAsyncDashboardToast({ message: "取得文章內容失敗", success: false }));
             setMod("view");
         } finally {

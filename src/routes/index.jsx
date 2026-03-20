@@ -1,7 +1,4 @@
-import { Fragment } from 'react';
-import { Outlet } from 'react-router-dom';
-
-import DocumentTitle from './DocumentTitle';
+import RootLayout from './RootLayout.jsx';
 
 import MainLayout from '../views/storefront/MainLayout.jsx';
 
@@ -100,15 +97,6 @@ const adminPagesItems = adminPages.map((item) => ({
     icon: item.icon,
 }));
 
-
-function RootLayout() {
-    return (
-      <Fragment>
-        <DocumentTitle />
-        <Outlet />
-      </Fragment>
-    );
-  }
 
 export default function routes() {
     return [

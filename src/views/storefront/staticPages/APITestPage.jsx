@@ -23,7 +23,7 @@ export default function APITestPage() {
   
                 setProducts([]);
             }
-        } catch (error) {
+        } catch {
             setProducts([]); 
         }
     }
@@ -39,14 +39,16 @@ export default function APITestPage() {
   
                 setProduct(null);
             }
-        } catch (error) {
+        } catch {
             setProduct(null); 
         }
     }
   
     useEffect(() => {
-      getProducts();
-      getProducById(productId);
+      queueMicrotask(() => {
+        getProducts();
+        getProducById(productId);
+      });
     }, []);
 
 

@@ -1,11 +1,4 @@
-// 用户数据（模拟数据）
-export const userProfile = {
-  name: "陳雅文",
-  email: "yawen@example.com",
-  phone: "0912-345-678"
-};
-
-/** 訂單結構：status 準備中|運送中|已送達；payment 信用卡付清|貨到付款；delivery 宅配|到店取貨 */
+/** 會員訂單頁展示用模擬訂單（OrdersPage）；結構：status 準備中|運送中|已送達 等 */
 const orderShape = (overrides) => ({
   status: '已送達',
   total: 0,

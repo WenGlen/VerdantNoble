@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 
@@ -18,8 +18,9 @@ export default function ProductDetailPage() {
   const [images, setImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(1);
 
-  async function getProduct() {
+  const getProduct = useCallback(async () => {
     if (!params.id) {
       setNotFound(true);
       setProduct({});
@@ -48,42 +49,11 @@ export default function ProductDetailPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [params.id]);
 
   useEffect(() => {
     getProduct();
-  }, [params.id]);
-
-
-  const Q = 5;
-/*
-{
-  "success": true,
-  "product": {
-    "category": "衣服3",
-    "content": "這是內容",
-    "description": "Sit down please 名設計師設計",
-    "id": "-L9tH8jxVb2Ka_DYPwng",
-    "imageUrl": "主圖網址",
-    "imagesUrl": [
-      "圖片網址一",
-      "圖片網址二",
-      "圖片網址三",
-      "圖片網址四",
-      "圖片網址五"
-    ],
-    "is_enabled": 1,
-    "num": 1,
-    "origin_price": 100,
-    "price": 600,
-    "title": "[賣]動物園造型衣服3",
-    "unit": "個"
-  }
-}
-*/
-
-
-
+  }, [getProduct]);
 
   // 解析 care JSON 字串 → 陣列
   const care = useMemo(() => {
@@ -96,7 +66,6 @@ export default function ProductDetailPage() {
 
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(1);
   const [cartLoading, setCartLoading] = useState(false);
 
   async function handleAddToCart() {

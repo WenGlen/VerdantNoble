@@ -12,15 +12,17 @@ function formatDate(value) {
     return String(value);
 }
 
-export default function FoucsPanel({ focus, setFocus, editProduct, setMod }) {
-    const [activeTab, setActiveTab] = useState('images');
-
-    const FocusPanelItem = ({ label, value }) => (
+function FocusPanelItem({ label, value }) {
+    return (
         <div className="flex justify-between">
             <span>{label}</span>
             <span>{value}</span>
         </div>
     );
+}
+
+export default function FoucsPanel({ focus, setFocus, editProduct, setMod }) {
+    const [activeTab, setActiveTab] = useState('images');
 
     const imageEntries = [
         { label: '主要圖片', src: focus.imageUrl },

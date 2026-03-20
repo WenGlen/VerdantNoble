@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { notifyToast } from '../../api/cart';
+import { persistGlenToken, setAxiosAuthorization } from '../../utils/adminAuthSideEffects';
 
 const { VITE_API_URL } = import.meta.env;
 
@@ -13,28 +14,27 @@ const EMAIL_PATTERN = {
 };
 
 export default function AdminLoginPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   // ====== 進入登入頁時先檢查是否已登入 ======
-  async function checkLogin() {
+  const checkLogin = useCallback(async () => {
     try {
       const token = document.cookie
         .split('; ')
         .find((row) => row.startsWith('GlenToken='))
         ?.split('=')[1];
       if (!token) return;
-      axios.defaults.headers.common['Authorization'] = token;
+      setAxiosAuthorization(token);
       await axios.post(`${VITE_API_URL}/api/user/check`);
       navigate('/admin/ProductsManagement', { replace: true });
     } catch {
       // token 無效，留在登入頁
     }
-  }
+  }, [navigate]);
 
   useEffect(() => {
     checkLogin();
-  }, []);
+  }, [checkLogin]);
 
   // React Hook Form
   const {
@@ -56,17 +56,13 @@ export default function AdminLoginPage() {
         password: data.password,
       });
       const { token, expired } = res.data;
-      // 存 cookie
-      document.cookie = `GlenToken=${token};expires=${new Date(expired)};`;
-      // 設定 axios headers
-      axios.defaults.headers.common['Authorization'] = token;
-      // 通知MainLayout登入成功
-      setIsLoggedIn(true);
+      persistGlenToken(token, expired);
+      setAxiosAuthorization(token);
       // 程式化導航：登入成功後跳轉到後台
       notifyToast('登入成功');
       navigate('/admin/ProductsManagement', { replace: true });
 
-    } catch (error) {
+    } catch {
       setFailed(true);
     }
     setLoading(false);
@@ -74,13 +70,6 @@ export default function AdminLoginPage() {
 
   return (
     <main className="w-full h-screen flex-col-center">
-      {/* 測試用 */}
-            <div className="fixed bottom-0 left-0 z-50 text-[8px] text-white p-2 bg-black/50 rounded-tr-md  flex flex-row-between-center gap-2">
-                <p>快速登入用</p>
-                <p>isLoggedIn：{isLoggedIn ? 'true' : 'false'}</p>
-                <button className="px-2 py-0 bg-black/50 rounded-md text-2xs" onClick={() => {setIsLoggedIn(!isLoggedIn); navigate('/admin/ProductsManagement', { replace: true });}}>{isLoggedIn ? '登出' : '登入'}</button>
-            </div>
-
       <div className="w-full max-w-[320px] mx-auto rounded-md bg-card p-8">
         <h1 className="text-lg font-bold text-center mb-8">登入</h1>
         <form

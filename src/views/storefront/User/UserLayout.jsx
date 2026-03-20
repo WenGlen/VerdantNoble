@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { Outlet, NavLink, useLocation, useNavigate, useOutletContext } from 'react-router-dom';
+import { Outlet, NavLink, useLocation } from 'react-router-dom';
 
 export default function UserLayout() {
   const location = useLocation();

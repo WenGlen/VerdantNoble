@@ -18,7 +18,7 @@ export default function ProductCard({
   };
 
   return (
-    <div className={`${usedOnPage === 'home' ? 'w-[calc(50%-12px)] md:w-56' : 'w-full'}
+    <div className={`${usedOnPage === 'home' ? ' md:w-56' : 'w-full'}
                     flex-col-start gap-2 hover:translate-y-[-6px] transition-all duration-200`}>
       {/* 圖片區域 */}
       <div className={`relative w-full

@@ -115,7 +115,9 @@ export default function ConfirmPage({
     /** 小計滿 2000 時若已選貨到付款，自動改為信用卡 */
     useEffect(() => {
         if (!isCashOnDeliveryAvailable && paymentInfo.type === '貨到付款') {
-            setPaymentInfo((prev) => ({ ...prev, type: '信用卡' }));
+            queueMicrotask(() =>
+                setPaymentInfo((prev) => ({ ...prev, type: '信用卡' }))
+            );
         }
     }, [isCashOnDeliveryAvailable, paymentInfo.type]);
 
@@ -212,17 +214,17 @@ export default function ConfirmPage({
 
     return (
         <>
-        <div className="w-full max-w-screen-xl mx-auto flex flex-col md:flex-row gap-0 md:gap-8" /* container */>
+        <div className="w-full max-w-screen-xl mx-auto flex flex-col lg:flex-row gap-0 lg:gap-8" /* container */>
 
-        <section className="w-full p-4 md:p-8 max-w-screen-md space-y-8">
+        <section className="w-full p-4 lg:p-8 max-w-screen-md space-y-8">
             <PageTitle title="訂單資訊" mobile="hidden"/>
 
             <form className="flex flex-col" onSubmit={handleSubmit}>
                 {/* 訂購資訊 */}
                 <div className="w-full border-b border-border-50 py-12 space-y-4">
-                    <div className="flex gap-2 items-center md:gap-8 justify-between">
+                    <div className="flex gap-2 items-center lg:gap-8 justify-between">
                         <h3 className="text-lg font-bold">訂購資訊</h3>
-                        <div className="hidden md:block text-xs text-gray-500 w-[300px] text-right">（實際會員登入功能還沒做，<br/>先做個帶做預設資料的按鈕）</div>
+                        <div className="hidden lg:block text-xs text-gray-500 w-[300px] text-right">（實際會員登入功能還沒做，<br/>先做個帶做預設資料的按鈕）</div>
                         <button type="button" className="btn-primary text-xs " 
                                 disabled={isLoggedIn}
                                 onClick={() => {
@@ -235,7 +237,7 @@ export default function ConfirmPage({
                         </button>
                     </div>
 
-                    <div className="flex flex-col gap-4 md:flex-row md:gap-8">
+                    <div className="flex flex-col gap-4 xl:flex-row xl:gap-8">
                         <FormInput
                             label="訂購人姓名"
                             disabled={isLoggedIn}
@@ -276,7 +278,7 @@ export default function ConfirmPage({
 
                 {/* 付款資訊 */}
                 <div className="w-full border-b border-border-50 py-12 space-y-4">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
+                    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-8">
                         <h3 className="text-lg font-bold">付款資訊</h3>
                         {isLoggedIn && (
                         <div className="flex items-center gap-2">
@@ -287,7 +289,7 @@ export default function ConfirmPage({
                         )}
                     </div>
 
-                    <div className="w-full md:w-fit flex rounded-md overflow-hidden gap-0 sm:gap-0">
+                    <div className="w-full lg:w-fit flex rounded-md overflow-hidden gap-0 sm:gap-0">
                         <button type="button" className={`btn-segmented flex-1 sm:flex-initial ${paymentInfo.type === '信用卡' ? 'active' : ''}`} 
                                 onClick={() => setPaymentInfo((prev) => ({ ...prev, type: '信用卡' }))}>
                             信用卡
@@ -295,7 +297,7 @@ export default function ConfirmPage({
                         <button type="button" className={`btn-segmented flex-1 sm:flex-initial ${paymentInfo.type === '貨到付款' ? 'active' : ''}`}
                                 disabled={!isCashOnDeliveryAvailable}
                                 onClick={() => setPaymentInfo((prev) => ({ ...prev, type: '貨到付款' }))}>
-                            貨到付款<br className="block md:hidden "/>（2000元以下適用）
+                            貨到付款<br className="block lg:hidden "/>（2000元以下適用）
                         </button>
                     </div>
                     {paymentInfo.type === '信用卡' ? (
@@ -320,7 +322,7 @@ export default function ConfirmPage({
                             }}
                         />
 
-                        <div className="flex flex-col gap-4 md:flex-row md:gap-8">
+                        <div className="flex flex-col gap-4 xl:flex-row xl:gap-8">
                             <FormInput
                                 label="到期日"
                                 disabled={useDefaultPaymentInfo}
@@ -390,7 +392,7 @@ export default function ConfirmPage({
 
                 {/* 收件資訊 */}
                 <div className="w-full border-b border-border-50 py-12 space-y-4">
-                    <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-8">
+                    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-8">
                         <h3 className="text-lg font-bold">收件資訊</h3>
                         {isLoggedIn && (
                         <div className="flex items-center gap-2">
@@ -401,7 +403,7 @@ export default function ConfirmPage({
                         )}
                     </div>
 
-                    <div className="w-full md:w-fit flex rounded-md overflow-hidden gap-0 sm:gap-0">
+                    <div className="w-full lg:w-fit flex rounded-md overflow-hidden gap-0 sm:gap-0">
                         <button type="button" className={`btn-segmented flex-1 sm:flex-initial ${shippingInfo.type === '宅配' ? 'active' : ''}`} 
                                 onClick={() => setShippingInfo((prev) => ({ ...prev, type: '宅配' }))}>
                             宅配
@@ -412,7 +414,7 @@ export default function ConfirmPage({
                         </button>
                     </div>
 
-                        <div className="flex flex-col gap-4 md:flex-row md:gap-8">
+                        <div className="flex flex-col gap-4 xl:flex-row xl:gap-8">
                             <FormInput
                                 label="收件人姓名"
                                 disabled={useDefaultShippingInfo}
@@ -458,12 +460,12 @@ export default function ConfirmPage({
                         </>
                         ) : (
                         <>
-                            <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-2">
-                                <label className="flex flex-col gap-1 md:flex-row md:items-start md:gap-2">
+                            <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:gap-2">
+                                <label className="flex flex-col gap-1 lg:flex-row lg:items-start lg:gap-2">
                                     <span className="form-label pt-2">預計取貨日</span>
                                     <div className="flex-1 min-w-0 flex flex-col gap-1">
                                         <select
-                                            className="w-full md:w-[200px] min-w-0"
+                                            className="w-full lg:w-[200px] min-w-0"
                                             {...register('shipping.pickupTime', {
                                                 validate: (v) => {
                                                     if (shippingInfo.type !== '到店取貨') return true;
@@ -484,7 +486,7 @@ export default function ConfirmPage({
                                         )}
                                     </div>
                                 </label>
-                                <p className="text-xs text-muted md:w-[300px] ml-2">取貨日為隔天起 7 日內（週四不營業）<br/>請於 11:00–21:00 到店取貨</p>
+                                <p className="text-xs text-muted lg:w-[300px] ml-2">取貨日為隔天起 7 日內（週四不營業）<br/>請於 11:00–21:00 到店取貨</p>
                             </div>
 
                             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
@@ -523,7 +525,7 @@ export default function ConfirmPage({
                 </div>
 
                     {/* 折扣碼 */}
-                    <label className="flex flex-col gap-1 md:flex-row md:items-center md:gap-2">
+                    <label className="flex flex-col gap-1 lg:flex-row lg:items-center lg:gap-2">
                         <span className="form-label">折扣碼</span>
                         <div className="w-full flex gap-2">
                             <input
@@ -550,7 +552,7 @@ export default function ConfirmPage({
 
                 </div>
 
-                <div className="py-8 block md:hidden">
+                <div className="py-8 block lg:hidden">
                     <div className="bg-panel-50 p-4 rounded-md space-y-8 sticky top-4">
                         <h3 className="text-lg font-bold">訂單內容</h3>
                         <OrderSummary items={cartItems} freight={freight} discount={appliedDiscount} />
@@ -559,15 +561,15 @@ export default function ConfirmPage({
                 
 
                 {/* 送出訂單按鈕 */}
-                <div className="w-full py-6 md:py-12 flex flex-col md:flex-row items-center justify-end gap-2 md:gap-4">
+                <div className="w-full py-6 lg:py-12 flex flex-col lg:flex-row items-center justify-end gap-2 lg:gap-4">
                     {hasAttemptedSubmit && !isFormValid && invalidSections.length > 0 && (
-                        <span className="text-sm text-error w-full md:w-auto md:mr-auto" role="alert">
+                        <span className="text-sm text-error w-full lg:w-auto lg:mr-auto" role="alert">
                             請填寫完：{invalidSections.join('、')}
                         </span>
                     )}
                     <button
                         type="submit"
-                        className="btn-primary w-full md:w-auto"
+                        className="btn-primary w-full lg:w-auto"
                     >
                         送出訂單
                     </button>
@@ -578,7 +580,7 @@ export default function ConfirmPage({
         </section>
 
 
-        <aside className="py-28 pr-8 hidden md:block">
+        <aside className="py-28 pr-8 hidden lg:block">
             <div className="w-[400px] bg-panel-50 p-4 rounded-md space-y-8">
                 <h3 className="text-lg font-bold">訂單內容</h3>
                 <OrderSummary items={cartItems} freight={freight} discount={appliedDiscount} />

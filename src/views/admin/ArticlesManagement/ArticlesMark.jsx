@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
@@ -14,11 +14,7 @@ export default function ArticlesMark() {
     const [togglingId, setTogglingId] = useState(null);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        loadArticles();
-    }, []);
-
-    async function loadArticles() {
+    const loadArticles = useCallback(async () => {
         setLoading(true);
         try {
             let all = [];
@@ -40,7 +36,11 @@ export default function ArticlesMark() {
         } finally {
             setLoading(false);
         }
-    }
+    }, [dispatch]);
+
+    useEffect(() => {
+        loadArticles();
+    }, [loadArticles]);
 
     const featuredArticle = articles.find(a => Array.isArray(a.tag) && a.tag.includes(FEATURED_TAG));
 
@@ -164,7 +164,7 @@ export default function ArticlesMark() {
                             <div className="min-w-0">
                                 <p className="font-semibold text-sm text-admin-text truncate">{featuredArticle.title}</p>
                                 <p className="text-xs text-admin-text-muted">
-                                    {featuredArticle.author}　{formatTimestamp(featuredArticle.create_at)}
+                                    {featuredArticle.author} {formatTimestamp(featuredArticle.create_at)}
                                 </p>
                             </div>
                         </div>
@@ -217,7 +217,7 @@ export default function ArticlesMark() {
                                     )}
                                 </div>
                                 <p className="text-xs text-admin-text-muted">
-                                    {article.author}　{formatTimestamp(article.create_at)}
+                                    {article.author} {formatTimestamp(article.create_at)}
                                 </p>
                             </div>
 

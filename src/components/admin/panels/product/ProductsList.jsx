@@ -72,12 +72,12 @@ export default function ProductsList({
     }, [products.length, calculateMaxItemsPerPage]);
 
     useEffect(() => {
-        setCurrentPage(1);
+        queueMicrotask(() => setCurrentPage(1));
     }, [products.length]);
 
     useEffect(() => {
         if (currentPage > totalPages && totalPages > 0) {
-            setCurrentPage(1);
+            queueMicrotask(() => setCurrentPage(1));
         }
     }, [currentPage, totalPages]);
 

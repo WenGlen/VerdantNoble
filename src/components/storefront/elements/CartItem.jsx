@@ -3,10 +3,15 @@ import QuantityController from './QuantityController';
 import deleteIcon from '../../../img/delete.png';
 
 
+function finiteNumber(value, fallback) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 export default function CartItem({ item, updateQuantity, removeItem }) {
-  const price = Number(item?.price) ?? 0;
-  const quantity = Number(item?.quantity) ?? 0;
-  const stock = Number(item?.stock) ?? 999;
+  const price = finiteNumber(item?.price, 0);
+  const quantity = finiteNumber(item?.quantity, 0);
+  const stock = finiteNumber(item?.stock, 999);
   const isBoutique = item?.category === '精品';
   const maxQuantity = Math.max(1, stock);
   const unit = item?.unit;

@@ -60,7 +60,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-6">
             {topFourProducts.map((product) => (
               <Link key={product.id} to={`/product/${product.id}`} >
                 <ProductCard

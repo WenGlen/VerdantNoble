@@ -40,7 +40,7 @@ export default function MainLayout({
 
     // 換頁時重新檢查登入狀態（從登入頁回來時會更新）
     useEffect(() => {
-        setIsLoggedIn(!!getLoginToken());
+        queueMicrotask(() => setIsLoggedIn(!!getLoginToken()));
     }, [location.pathname]);
 
     useEffect(() => {

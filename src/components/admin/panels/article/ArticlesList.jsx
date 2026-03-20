@@ -67,10 +67,14 @@ export default function ArticlesList({
         };
     }, [articles.length, calculateMaxItemsPerPage]);
 
-    useEffect(() => { setCurrentPage(1); }, [articles.length]);
+    useEffect(() => {
+        queueMicrotask(() => setCurrentPage(1));
+    }, [articles.length]);
 
     useEffect(() => {
-        if (currentPage > totalPages && totalPages > 0) setCurrentPage(1);
+        if (currentPage > totalPages && totalPages > 0) {
+            queueMicrotask(() => setCurrentPage(1));
+        }
     }, [currentPage, totalPages]);
 
     const goToPage = useCallback((page) => {

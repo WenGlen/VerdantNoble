@@ -9,12 +9,6 @@ export default function FAQPage() {
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
-  const scrollToAndExpand = (id) => {
-    setExpandedId(id);
-    const el = document.getElementById(id);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
   return (
     <section className="w-full p-4 max-w-screen-md space-y-8">
       <PageTitle title="常見問題"/>

@@ -20,13 +20,15 @@ export default function AdminLayout({ adminPagesItems = [] }) {
             .split('; ')
             .find(row => row.startsWith('GlenToken='))
             ?.split('=')[1];
-        if (token) {
-            axios.defaults.headers.common['Authorization'] = token;
-            setIsLoggedIn(true);
-        } else {
-            setIsLoggedIn(false);
-        }
-        setHasCheckedAuth(true);
+        queueMicrotask(() => {
+            if (token) {
+                axios.defaults.headers.common['Authorization'] = token;
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+            setHasCheckedAuth(true);
+        });
     }, []);
 
     function handleLogout() {
