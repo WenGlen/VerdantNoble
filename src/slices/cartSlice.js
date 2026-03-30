@@ -35,9 +35,11 @@ export const fetchCart = createAsyncThunk(
       const res = await getCart();
       return mapCartsToItems(res.data);
     } catch (err) {
-      return rejectWithValue(err?.response?.data?.message ?? err?.message ?? "fetch failed");
+      return rejectWithValue(
+        err?.response?.data?.message ?? err?.message ?? "fetch failed",
+      );
     }
-  }
+  },
 );
 
 export const updateQuantity = createAsyncThunk(
@@ -59,7 +61,7 @@ export const updateQuantity = createAsyncThunk(
       notifyToast(msg);
       return rejectWithValue(msg);
     }
-  }
+  },
 );
 
 export const removeItem = createAsyncThunk(
@@ -75,7 +77,7 @@ export const removeItem = createAsyncThunk(
       notifyToast(msg);
       return rejectWithValue(msg);
     }
-  }
+  },
 );
 
 export const clearCart = createAsyncThunk(
@@ -89,7 +91,7 @@ export const clearCart = createAsyncThunk(
       notifyToast("訂單已送出，但清空購物車時發生錯誤");
       return rejectWithValue(err?.message);
     }
-  }
+  },
 );
 
 const MSG_LIMIT = "超過可購數量上限<br/>（庫存僅 ";
@@ -105,21 +107,21 @@ export const addToCartWithStockCheck = createAsyncThunk(
   "cart/addToCartWithStockCheck",
   async (
     { productId, qty = 1, stock: stockParam = null, unit = "" },
-    { getState, dispatch, rejectWithValue }
+    { getState, dispatch, rejectWithValue },
   ) => {
     const state = getState();
     const products = state.products?.list ?? [];
     const cartItems = state.cart?.items ?? [];
 
     const product = products.find((p) => p.id === productId);
-    const stock = stockParam != null ? stockParam : product?.stock ?? null;
+    const stock = stockParam != null ? stockParam : (product?.stock ?? null);
     const currentQtyInCart = cartItems
       .filter((i) => i.product_id === productId)
       .reduce((sum, i) => sum + (i.quantity || 0), 0);
 
     if (stock != null && currentQtyInCart + qty > stock) {
       dispatch(
-        showStorefrontToast(`${MSG_LIMIT}${stock} ${unit}${MSG_LIMIT_SUFFIX}`)
+        showStorefrontToast(`${MSG_LIMIT}${stock} ${unit}${MSG_LIMIT_SUFFIX}`),
       );
       return rejectWithValue("over_limit");
     }
@@ -130,7 +132,7 @@ export const addToCartWithStockCheck = createAsyncThunk(
         await updateCartItemApi(
           existing.id,
           productId,
-          (existing.quantity || 0) + qty
+          (existing.quantity || 0) + qty,
         );
       } else {
         await addToCartApi(productId, qty);
@@ -144,7 +146,7 @@ export const addToCartWithStockCheck = createAsyncThunk(
       dispatch(showStorefrontToast(msg));
       return rejectWithValue(msg);
     }
-  }
+  },
 );
 
 const cartSlice = createSlice({

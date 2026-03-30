@@ -1,15 +1,15 @@
-import { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import ArticleCard from '../../../components/storefront/elements/ArticleCard';
-import Pagination from '../../../components/storefront/elements/Pagination';
-import { fetchArticles } from '../../../slices/articlesSlice';
+import { useState, useMemo, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import ArticleCard from "../../../components/storefront/elements/ArticleCard";
+import Pagination from "../../../components/storefront/elements/Pagination";
+import { fetchArticles } from "../../../slices/articlesSlice";
 
 const ITEMS_PER_PAGE = 4;
 
 function isFeatured(article) {
   return Array.isArray(article.tag)
-    ? article.tag.includes('精選')
+    ? article.tag.includes("精選")
     : article.is_featured === true;
 }
 
@@ -19,7 +19,7 @@ export default function ArticlesPage() {
   const loading = useSelector((state) => state.articles.loading);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [activeTag, setActiveTag] = useState(null);
 
   useEffect(() => {
@@ -53,15 +53,16 @@ export default function ArticlesPage() {
 
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter((a) =>
-        a.title?.toLowerCase().includes(term) ||
-        a.description?.toLowerCase().includes(term)
+      filtered = filtered.filter(
+        (a) =>
+          a.title?.toLowerCase().includes(term) ||
+          a.description?.toLowerCase().includes(term),
       );
     }
 
     if (activeTag) {
-      filtered = filtered.filter((a) =>
-        Array.isArray(a.tag) && a.tag.includes(activeTag)
+      filtered = filtered.filter(
+        (a) => Array.isArray(a.tag) && a.tag.includes(activeTag),
       );
     }
 
@@ -70,7 +71,10 @@ export default function ArticlesPage() {
 
   const totalPages = Math.ceil(filteredArticles.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentArticles = filteredArticles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentArticles = filteredArticles.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE,
+  );
 
   function handleSearch(e) {
     setSearchTerm(e.target.value);
@@ -83,13 +87,20 @@ export default function ArticlesPage() {
   }
 
   function handlePrevious() {
-    if (currentPage > 1) { setCurrentPage((p) => p - 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    if (currentPage > 1) {
+      setCurrentPage((p) => p - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
   function handleNext() {
-    if (currentPage < totalPages) { setCurrentPage((p) => p + 1); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    if (currentPage < totalPages) {
+      setCurrentPage((p) => p + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
   function handlePageClick(page) {
-    setCurrentPage(page); window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   return (
@@ -128,7 +139,6 @@ export default function ArticlesPage() {
 
       <div className="px-8">
         <section className="w-full flex flex-col-reverse md:flex-row md:py-16 gap-8">
-
           {/* 文章列表 */}
           <div className="w-full md:w-[80%] space-y-8">
             <div className="w-full border-b border-border-50">
@@ -172,10 +182,17 @@ export default function ArticlesPage() {
             <div className="flex-col gap-4 md:gap-12 pt-8">
               {/* 搜尋 */}
               <div className="relative flex-row-start-center gap-2">
-                <svg className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2" viewBox="0 0 20 20" fill="none">
+                <svg
+                  className="w-4 h-4 absolute left-2 top-1/2 -translate-y-1/2"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                >
                   <path
                     d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35"
-                    stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
                 </svg>
                 <input
@@ -196,7 +213,7 @@ export default function ArticlesPage() {
                     {allTags.map((tag) => (
                       <button
                         key={tag}
-                        className={`btn-tag text-xs font-bold ${activeTag === tag ? 'active' : ''}`}
+                        className={`btn-tag text-xs font-bold ${activeTag === tag ? "active" : ""}`}
                         onClick={() => handleTagClick(tag)}
                       >
                         {tag}
@@ -207,7 +224,6 @@ export default function ArticlesPage() {
               )}
             </div>
           </aside>
-
         </section>
       </div>
     </>

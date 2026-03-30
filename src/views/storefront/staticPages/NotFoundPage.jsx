@@ -1,23 +1,21 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+export default function NotFoundPage() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const t = setTimeout(() => {
+      navigate("/", { replace: true });
+    }, 3000);
+    return () => clearTimeout(t);
+  }, [navigate]);
 
-export default function NotFoundPage() {  
-
-    const navigate = useNavigate();
-    useEffect(() => {
-        const t = setTimeout(() => {
-            navigate('/', { replace: true });
-        }, 3000);
-        return () => clearTimeout(t);
-    }, [navigate]);
-
-    return (
-        <>
-            <div className="h-24"/>
-            <div className="not-found-page">
-                <h1>404 Not Found</h1>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <div className="h-24" />
+      <div className="not-found-page">
+        <h1>404 Not Found</h1>
+      </div>
+    </>
+  );
 }

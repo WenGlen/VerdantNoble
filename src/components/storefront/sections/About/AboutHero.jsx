@@ -5,7 +5,11 @@ export default function AboutHero() {
         <div className="w-full h-full bg-black flex-row-center-center">
           {/* 佔位*/}
           <div className="w-full h-full opacity-30 ">
-            <img src="https://i.meee.com.tw/NPb1c2l.png" alt="about hero" className="w-full h-full object-cover" />
+            <img
+              src="https://i.meee.com.tw/NPb1c2l.png"
+              alt="關於我們 — 綠蕨飾品牌形象"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </div>
@@ -13,7 +17,10 @@ export default function AboutHero() {
       {/* 文字内容 */}
       <div className="z-10 text-center flex-col-center-center gap-4">
         <h1 className="text-6xl font-serif text-white">
-          綠蕨飾 <br /><span className="text-secondary text-2xl md:text-6xl ">Verdant Noble</span>
+          綠蕨飾 <br />
+          <span className="text-secondary text-2xl md:text-6xl ">
+            Verdant Noble
+          </span>
         </h1>
         <p className="text-xl md:text-lg text-secondary-50 font-serif">
           低調，卻始終被高雅
@@ -26,4 +33,3 @@ export default function AboutHero() {
     </section>
   );
 }
-

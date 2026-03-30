@@ -11,9 +11,11 @@ export const fetchProducts = createAsyncThunk(
       const list = raw && typeof raw === "object" ? Object.values(raw) : [];
       return Array.isArray(list) ? list : [];
     } catch (err) {
-      return rejectWithValue(err?.response?.data?.message ?? err?.message ?? "fetch failed");
+      return rejectWithValue(
+        err?.response?.data?.message ?? err?.message ?? "fetch failed",
+      );
     }
-  }
+  },
 );
 
 const productsSlice = createSlice({

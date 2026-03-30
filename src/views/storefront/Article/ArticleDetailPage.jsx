@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { getArticleById } from '../../../api/articles';
-import { fetchProducts } from '../../../slices/productsSlice';
-import ProductCard from '../../../components/storefront/elements/ProductCard';
-import NotFoundPage from '../../storefront/staticPages/NotFoundPage';
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getArticleById } from "../../../api/articles";
+import { fetchProducts } from "../../../slices/productsSlice";
+import ProductCard from "../../../components/storefront/elements/ProductCard";
+import NotFoundPage from "../../storefront/staticPages/NotFoundPage";
 
 function formatDate(ts) {
-  if (!ts) return '';
-  const date = typeof ts === 'number' ? new Date(ts * 1000) : new Date(ts);
-  if (isNaN(date.getTime())) return '';
+  if (!ts) return "";
+  const date = typeof ts === "number" ? new Date(ts * 1000) : new Date(ts);
+  if (isNaN(date.getTime())) return "";
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}.${month}.${day}`;
 }
 
@@ -30,38 +30,44 @@ function parseContent(raw) {
 // 將文字段落依換行切分，`- ` 開頭的行轉為點列
 function renderTextContent(text, baseClass) {
   if (!text) return null;
-  const lines = text.split('\n');
+  const lines = text.split("\n");
 
   const segments = [];
   let currentList = [];
 
   for (const line of lines) {
     if (/^-\s/.test(line)) {
-      currentList.push(line.replace(/^-\s/, ''));
+      currentList.push(line.replace(/^-\s/, ""));
     } else {
       if (currentList.length) {
-        segments.push({ type: 'list', items: [...currentList] });
+        segments.push({ type: "list", items: [...currentList] });
         currentList = [];
       }
-      segments.push({ type: 'line', text: line });
+      segments.push({ type: "line", text: line });
     }
   }
   if (currentList.length) {
-    segments.push({ type: 'list', items: currentList });
+    segments.push({ type: "list", items: currentList });
   }
 
   return segments.map((seg, i) => {
-    if (seg.type === 'list') {
+    if (seg.type === "list") {
       return (
         <ul key={i} className={`list-disc pl-5 space-y-1 ${baseClass}`}>
-          {seg.items.map((item, j) => <li key={j}>{item}</li>)}
+          {seg.items.map((item, j) => (
+            <li key={j}>{item}</li>
+          ))}
         </ul>
       );
     }
     // 空行保留為間距，有文字才渲染
-    return seg.text.trim()
-      ? <p key={i} className={baseClass}>{seg.text}</p>
-      : <div key={i} className="h-2" />;
+    return seg.text.trim() ? (
+      <p key={i} className={baseClass}>
+        {seg.text}
+      </p>
+    ) : (
+      <div key={i} className="h-2" />
+    );
   });
 }
 
@@ -82,7 +88,10 @@ export default function ArticleDetailPage() {
     getArticleById(id)
       .then((res) => {
         const data = res.data?.article;
-        if (!data) { setNotFound(true); return; }
+        if (!data) {
+          setNotFound(true);
+          return;
+        }
         setArticle(data);
       })
       .catch(() => setNotFound(true))
@@ -106,9 +115,11 @@ export default function ArticleDetailPage() {
   }
 
   const blocks = parseContent(article.content);
-  const relatedProductIds = Array.isArray(article.relatedProducts) ? article.relatedProducts : [];
+  const relatedProductIds = Array.isArray(article.relatedProducts)
+    ? article.relatedProducts
+    : [];
   const relatedProductsData = relatedProductIds
-    .map(pid => productsList.find(p => p.id === pid))
+    .map((pid) => productsList.find((p) => p.id === pid))
     .filter(Boolean)
     .slice(0, 3);
 
@@ -138,30 +149,38 @@ export default function ArticleDetailPage() {
       {/* 內文 */}
       <section>
         <div className="mx-auto max-w-screen-md space-y-8 p-8">
-          
           {blocks.map((item, index) => {
-            if (item.type === 'heading') {
+            if (item.type === "heading") {
               return (
-                <h3 key={index} className="text-[1.35rem] font-semibold text-text-default leading-[1.4] pb-[0.4rem] border-b border-border">
+                <h3
+                  key={index}
+                  className="text-[1.35rem] font-semibold text-text-default leading-[1.4] pb-[0.4rem] border-b border-border"
+                >
                   {item.value}
                 </h3>
               );
             }
-            if (item.type === 'text' || item.type === 'paragraph') {
+            if (item.type === "text" || item.type === "paragraph") {
               return (
                 <div key={index} className="flex flex-col gap-2">
-                  {renderTextContent(item.value ?? item.text, "leading-[2] text-text-default")}
+                  {renderTextContent(
+                    item.value ?? item.text,
+                    "leading-[2] text-text-default",
+                  )}
                 </div>
               );
             }
-            if (item.type === 'emphasis') {
+            if (item.type === "emphasis") {
               return (
-                <blockquote key={index} className="font-serif text-lg text-secondary">
+                <blockquote
+                  key={index}
+                  className="font-serif text-lg text-secondary"
+                >
                   {item.value}
                 </blockquote>
               );
             }
-            if (item.type === 'image') {
+            if (item.type === "image") {
               const imgSrc = item.url || item.src;
               return (
                 <figure key={index} className="m-0">
@@ -169,7 +188,11 @@ export default function ArticleDetailPage() {
                     {imgSrc ? (
                       <img
                         src={imgSrc}
-                        alt={item.caption || ''}
+                        alt={
+                          item.caption?.trim()
+                            ? item.caption
+                            : `${article.title} 附圖`
+                        }
                         className="w-full h-auto block object-cover"
                       />
                     ) : (
@@ -188,7 +211,6 @@ export default function ArticleDetailPage() {
             }
             return null;
           })}
-
         </div>
       </section>
 
@@ -201,7 +223,11 @@ export default function ArticleDetailPage() {
                 <h3>相關商品</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {relatedProductsData.map((product) => (
-                    <Link key={product.id} to={`/product/${product.id}`} className="link-card">
+                    <Link
+                      key={product.id}
+                      to={`/product/${product.id}`}
+                      className="link-card"
+                    >
                       <ProductCard {...product} usedOnPage="products" />
                     </Link>
                   ))}

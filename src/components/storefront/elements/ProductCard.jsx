@@ -1,3 +1,5 @@
+import { formatPrice } from "../../../utils/formatPrice";
+
 export default function ProductCard({
   id,
   title,
@@ -9,20 +11,24 @@ export default function ProductCard({
   usedOnPage,
   onAddToCart,
   stock,
-  unit = '',
+  unit = "",
 }) {
   const handleAddClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (typeof onAddToCart === 'function') onAddToCart(id, 1, stock, unit);
+    if (typeof onAddToCart === "function") onAddToCart(id, 1, stock, unit);
   };
 
   return (
-    <div className={`${usedOnPage === 'home' ? ' md:w-56' : 'w-full'}
-                    flex-col-start gap-2 hover:translate-y-[-6px] transition-all duration-200`}>
+    <div
+      className={`${usedOnPage === "home" ? " md:w-56" : "w-full"}
+                    flex-col-start gap-2 hover:translate-y-[-6px] transition-all duration-200`}
+    >
       {/* 圖片區域 */}
-      <div className={`relative w-full
-                      aspect-square rounded-md overflow-hidden`}>
+      <div
+        className={`relative w-full
+                      aspect-square rounded-md overflow-hidden`}
+      >
         {imageUrl ? (
           <img
             src={imageUrl}
@@ -34,7 +40,7 @@ export default function ProductCard({
             <span>🌿</span>
           </div>
         )}
-        {is_featured && usedOnPage === 'products' && (
+        {is_featured && usedOnPage === "products" && (
           <span className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-primary text-white tracking-wide">
             精選
           </span>
@@ -51,10 +57,14 @@ export default function ProductCard({
             <div />
           )}
           <div className="flex-row-end-end gap-2 text-2xs items-baseline">
-            {price != origin_price && usedOnPage === 'products' && (
-              <p className="text-muted line-through">NT${origin_price}</p>
+            {price != origin_price && usedOnPage === "products" && (
+              <p className="text-muted line-through">
+                NT${formatPrice(origin_price)}
+              </p>
             )}
-            <p className="text-primary font-bold">NT$<span className="text-sm">{price}</span></p>
+            <p className="text-primary font-bold">
+              NT$<span className="text-sm">{formatPrice(price)}</span>
+            </p>
           </div>
         </div>
         {onAddToCart && (
@@ -70,4 +80,3 @@ export default function ProductCard({
     </div>
   );
 }
-

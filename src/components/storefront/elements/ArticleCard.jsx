@@ -1,15 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function formatCardDate(value) {
-  if (!value) return '';
+  if (!value) return "";
   // Unix timestamp（秒）
-  const date = typeof value === 'number'
-    ? new Date(value * 1000)
-    : new Date(value);
-  if (isNaN(date.getTime())) return '';
+  const date =
+    typeof value === "number" ? new Date(value * 1000) : new Date(value);
+  if (isNaN(date.getTime())) return "";
   const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
   return `${year}/${month}/${day}`;
 }
 
@@ -25,11 +24,14 @@ export default function ArticleCard({ article }) {
   // tag 可以是陣列（API）或字串（靜態）
   const firstTag = Array.isArray(article.tag)
     ? article.tag[0]
-    : (article.category || null);
+    : article.category || null;
 
   return (
     <article>
-      <Link to={`/articles/${routeId}`} className="link-card text-textDefaultColor">
+      <Link
+        to={`/articles/${routeId}`}
+        className="link-card text-textDefaultColor"
+      >
         <div className="w-full aspect-[16/9] rounded-md overflow-hidden mb-2">
           {imgSrc ? (
             <img
@@ -44,9 +46,7 @@ export default function ArticleCard({ article }) {
           )}
         </div>
         <div className="flex-row-start-center gap-4 py-2">
-          <time dateTime={String(dateValue)}>
-            {formatCardDate(dateValue)}
-          </time>
+          <time dateTime={String(dateValue)}>{formatCardDate(dateValue)}</time>
           {firstTag && (
             <div className="bg-panel-25 rounded-md px-3 py-1 text-xs font-bold">
               {firstTag}

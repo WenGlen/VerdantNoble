@@ -1,14 +1,14 @@
-import greenhouseIcon from '../../../../img/greenhouse.png';
-import humidityIcon from '../../../../img/humidity.png';
-import wateringIcon from '../../../../img/watering.png';
+import greenhouseIcon from "../../../../img/greenhouse.png";
+import humidityIcon from "../../../../img/humidity.png";
+import wateringIcon from "../../../../img/watering.png";
 
-const icons = [
-  greenhouseIcon,
-  wateringIcon,
-  humidityIcon
-]
+const icons = [greenhouseIcon, wateringIcon, humidityIcon];
 
-export default function CareTipsSection({ title = '養護重點', care, className = '' }) {
+export default function CareTipsSection({
+  title = "養護重點",
+  care,
+  className = "",
+}) {
   if (!Array.isArray(care) || care.length === 0) return null;
 
   return (

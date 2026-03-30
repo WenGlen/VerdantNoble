@@ -16,12 +16,14 @@ export const dashboardToastSlice = createSlice({
     setMessage: (state, action) => {
       state.push({
         id: action.payload.id,
-        type: action.payload.success ? 'success' : 'error',
+        type: action.payload.success ? "success" : "error",
         message: action.payload.message,
       });
     },
     removeMessage: (state, action) => {
-      const index = state.findIndex((message) => message.id === action.payload.id);
+      const index = state.findIndex(
+        (message) => message.id === action.payload.id,
+      );
       if (index !== -1) {
         state.splice(index, 1);
       }
@@ -30,13 +32,15 @@ export const dashboardToastSlice = createSlice({
 });
 
 export const createAsyncDashboardToast = createAsyncThunk(
-  'dashboardToast/createAsyncDashboardToast',
+  "dashboardToast/createAsyncDashboardToast",
   async (payload, { dispatch, requestId }) => {
     const id = requestId ?? Date.now();
-    dispatch(setMessage({
-      ...payload,
-      id,
-    }));
+    dispatch(
+      setMessage({
+        ...payload,
+        id,
+      }),
+    );
     // 3000ms display + 300ms exit animation
     setTimeout(() => {
       dispatch(removeMessage({ id }));

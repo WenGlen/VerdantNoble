@@ -8,9 +8,11 @@ export const fetchArticles = createAsyncThunk(
       const list = await getArticlesAll();
       return Array.isArray(list) ? list : [];
     } catch (err) {
-      return rejectWithValue(err?.response?.data?.message ?? err?.message ?? "fetch failed");
+      return rejectWithValue(
+        err?.response?.data?.message ?? err?.message ?? "fetch failed",
+      );
     }
-  }
+  },
 );
 
 const articlesSlice = createSlice({

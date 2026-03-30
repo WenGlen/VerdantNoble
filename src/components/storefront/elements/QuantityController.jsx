@@ -5,7 +5,7 @@ export default function QuantityController({
   unit,
   onChange,
   onRequestRemove,
-  className = '',
+  className = "",
 }) {
   const atMin = value <= min;
   const atMax = max != null && value >= max;
@@ -47,11 +47,14 @@ export default function QuantityController({
           +
         </button>
       </div>
-      <div  className="absolute -bottom-6 left-0 w-full text-xs text-center">
+      <div className="absolute -bottom-6 left-0 w-full text-xs text-center">
         {atMax && max != null ? (
-          <p className="text-error ">已達庫存上限</p> 
-        ):(
-          <p className="text-muted"> 庫存數 {max} {unit} </p>
+          <p className="text-error ">已達庫存上限</p>
+        ) : (
+          <p className="text-muted">
+            {" "}
+            庫存數 {max} {unit}{" "}
+          </p>
         )}
       </div>
     </div>

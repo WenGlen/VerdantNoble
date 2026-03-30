@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const TOAST_DURATION = 3000;
 const EXIT_ANIMATION_MS = 300;
@@ -27,7 +27,7 @@ export default function StorefrontToast() {
     const timers = messages.map((m) =>
       setTimeout(() => {
         setExitingIds((prev) => new Set(prev).add(m.id));
-      }, TOAST_DURATION)
+      }, TOAST_DURATION),
     );
     return () => timers.forEach(clearTimeout);
   }, [messages]);
@@ -42,14 +42,21 @@ export default function StorefrontToast() {
         return (
           <div key={item.id} className="overflow-hidden">
             <div
-              className={`transition-all ${!isEntered ? '-translate-y-full opacity-100' : isExiting ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}
-              style={{ transitionDuration: isEntered || isExiting ? `${EXIT_ANIMATION_MS}ms` : '0ms' }}
+              className={`transition-all ${!isEntered ? "-translate-y-full opacity-100" : isExiting ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"}`}
+              style={{
+                transitionDuration:
+                  isEntered || isExiting ? `${EXIT_ANIMATION_MS}ms` : "0ms",
+              }}
             >
               <div
                 className="mt-2 bg-secondary text-white px-4 py-2 rounded-md flex-row-center-center"
-                dangerouslySetInnerHTML={typeof item.message === 'string' ? { __html: item.message } : undefined}
+                dangerouslySetInnerHTML={
+                  typeof item.message === "string"
+                    ? { __html: item.message }
+                    : undefined
+                }
               >
-                {typeof item.message !== 'string' ? item.message : null}
+                {typeof item.message !== "string" ? item.message : null}
               </div>
             </div>
           </div>

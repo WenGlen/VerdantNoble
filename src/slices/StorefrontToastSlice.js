@@ -26,7 +26,7 @@ export const showStorefrontToast = createAsyncThunk(
     setTimeout(() => {
       dispatch(storefrontToastSlice.actions.removeMessage({ id }));
     }, 3300);
-  }
+  },
 );
 
 export const { addMessage, removeMessage } = storefrontToastSlice.actions;

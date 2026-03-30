@@ -1,8 +1,8 @@
-.border-test{
+.border-test {
   border: 2px solid hsl(340, 50%, 50%) !important;
 }
 
-.bg-test{
+.bg-test {
   background: hsl(340, 30%, 70%) !important;
 }
 
@@ -286,28 +286,47 @@
 
 // ===========================================
 
-
-@layer utilities { /* transition */
-    .ease-in-out-100 {transition: all 0.1s ease-in-out;}
-    .ease-in-out-200 {transition: all 0.2s ease-in-out;}
-    .ease-in-out-300 {transition: all 0.3s ease-in-out;}
-    .ease-in-out-400 {transition: all 0.4s ease-in-out;}
-    .ease-in-out-500 {transition: all 0.5s ease-in-out;}
-    .ease-in-out-600 {transition: all 0.6s ease-in-out;}
-    .ease-in-out-700 {transition: all 0.7s ease-in-out;}
-    .ease-in-out-800 {transition: all 0.8s ease-in-out;}
-    .ease-in-out-900 {transition: all 0.9s ease-in-out;}
-    .ease-in-out-1000 {transition: all 1s ease-in-out;}
+@layer utilities {
+  /* transition */
+  .ease-in-out-100 {
+    transition: all 0.1s ease-in-out;
   }
-  
-
-@layer utilities { /* scrollbar */
-    .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;  /* Chrome, Safari and Opera */
-    }
+  .ease-in-out-200 {
+    transition: all 0.2s ease-in-out;
   }
-  
+  .ease-in-out-300 {
+    transition: all 0.3s ease-in-out;
+  }
+  .ease-in-out-400 {
+    transition: all 0.4s ease-in-out;
+  }
+  .ease-in-out-500 {
+    transition: all 0.5s ease-in-out;
+  }
+  .ease-in-out-600 {
+    transition: all 0.6s ease-in-out;
+  }
+  .ease-in-out-700 {
+    transition: all 0.7s ease-in-out;
+  }
+  .ease-in-out-800 {
+    transition: all 0.8s ease-in-out;
+  }
+  .ease-in-out-900 {
+    transition: all 0.9s ease-in-out;
+  }
+  .ease-in-out-1000 {
+    transition: all 1s ease-in-out;
+  }
+}
+
+@layer utilities {
+  /* scrollbar */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+}

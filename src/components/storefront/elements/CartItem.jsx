@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import QuantityController from './QuantityController';
-import deleteIcon from '../../../img/delete.png';
-
+import { useState } from "react";
+import QuantityController from "./QuantityController";
+import deleteIcon from "../../../img/delete.png";
 
 function finiteNumber(value, fallback) {
   const n = Number(value);
@@ -12,7 +11,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
   const price = finiteNumber(item?.price, 0);
   const quantity = finiteNumber(item?.quantity, 0);
   const stock = finiteNumber(item?.stock, 999);
-  const isBoutique = item?.category === '精品';
+  const isBoutique = item?.category === "精品";
   const maxQuantity = Math.max(1, stock);
   const unit = item?.unit;
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -28,25 +27,33 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
 
   return (
     <>
-      <div
-        className="grid grid-cols-1 md:grid-cols-[4fr_2fr_2fr_2fr_1fr] gap-2 md:gap-4 py-8 md:py-4 border-b border-border last:border-b-0 items-center"
-      >
+      <div className="grid grid-cols-1 md:grid-cols-[4fr_2fr_2fr_2fr_1fr] gap-2 md:gap-4 py-8 md:py-4 border-b border-border last:border-b-0 items-center">
         <div className="flex items-center gap-4 min-w-0 md:col-span-1">
           <div className="w-14 h-14 md:w-16 md:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-panel-50 flex items-center justify-center">
             {item?.image ? (
-              <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <span className="text-2xl">🌿</span>
             )}
           </div>
           <div className="min-w-0">
-            <h3 className="text-md font-semibold text-default">{item?.name ?? ''}</h3>
+            <h3 className="text-md font-semibold text-default">
+              {item?.name ?? ""}
+            </h3>
             <p className="flex items-center gap-2 mt-0.5">
               {item?.variant != null && (
-                <span className="text-xs font-semibold text-primary uppercase">{item.variant}</span>
+                <span className="text-xs font-semibold text-primary uppercase">
+                  {item.variant}
+                </span>
               )}
               {item?.subvariant != null && (
-                <span className="text-xs text-muted uppercase">{item.subvariant}</span>
+                <span className="text-xs text-muted uppercase">
+                  {item.subvariant}
+                </span>
               )}
             </p>
           </div>
@@ -54,12 +61,16 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
 
         <div className="flex items-center justify-between md:contents px-4">
           <div className="flex items-center justify-between md:contents">
-            <span className="text-sm text-muted md:text-center md:justify-self-center">${price.toLocaleString()}</span>
+            <span className="text-sm text-muted md:text-center md:justify-self-center">
+              ${price.toLocaleString()}
+            </span>
           </div>
           <span className="text-sm text-muted block md:hidden">×</span>
 
           {isBoutique ? (
-            <span className="text-sm font-semibold w-[120px] text-center">1</span>
+            <span className="text-sm font-semibold w-[120px] text-center">
+              1
+            </span>
           ) : (
             <QuantityController
               value={quantity}
@@ -86,7 +97,7 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
               onClick={() => setShowDeleteConfirm(true)}
               aria-label="刪除此商品"
             >
-              <img src={deleteIcon} alt="delete" className="w-6 h-6" />
+              <img src={deleteIcon} alt="從購物車移除" className="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -123,7 +134,6 @@ export default function CartItem({ item, updateQuantity, removeItem }) {
               >
                 取消
               </button>
-
             </div>
           </div>
         </div>

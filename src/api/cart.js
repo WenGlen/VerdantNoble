@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { store } from '../store/store';
-import { showStorefrontToast } from '../slices/StorefrontToastSlice';
+import axios from "axios";
+import { store } from "../store/store";
+import { showStorefrontToast } from "../slices/StorefrontToastSlice";
 
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env;
 const base = `${VITE_API_URL}/api/${VITE_API_PATH}`;
@@ -71,7 +71,7 @@ export function clearCart() {
 
 // --- 自訂事件：通知 MainLayout 更新購物車數量 ---
 
-export const EVENT_CART_UPDATED = 'cartUpdated';
+export const EVENT_CART_UPDATED = "cartUpdated";
 
 export function notifyCartUpdated() {
   window.dispatchEvent(new CustomEvent(EVENT_CART_UPDATED));

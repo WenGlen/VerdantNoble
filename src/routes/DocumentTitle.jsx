@@ -1,7 +1,7 @@
-import { useMatches } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useMatches } from "react-router-dom";
+import { useEffect } from "react";
 
-const SITE_NAME = '綠蕨飾';
+const SITE_NAME = "綠蕨飾";
 
 /**
  * 依當前路由的 handle.title 設定 document.title
@@ -14,7 +14,7 @@ export default function DocumentTitle() {
 
   useEffect(() => {
     if (titleMatch?.handle?.title) {
-      if (titleMatch.handle.title === '') {
+      if (titleMatch.handle.title === "") {
         document.title = SITE_NAME;
       } else {
         document.title = `${titleMatch.handle.title} | ${SITE_NAME}`;

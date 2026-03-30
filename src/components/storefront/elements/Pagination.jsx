@@ -1,9 +1,9 @@
-export default function Pagination({ 
-  currentPage = 1, 
-  totalPages = 1, 
-  onPrevious, 
+export default function Pagination({
+  currentPage = 1,
+  totalPages = 1,
+  onPrevious,
   onNext,
-  onPageClick
+  onPageClick,
 }) {
   const hasPrevious = currentPage > 1;
   const hasNext = currentPage < totalPages;
@@ -14,7 +14,7 @@ export default function Pagination({
   const getPageNumbers = () => {
     const pages = [];
     const maxVisible = 3; // 最多顯示3個頁碼
-    
+
     if (totalPages <= maxVisible) {
       // 如果总页数少于等于3，显示所有页码
       for (let i = 1; i <= totalPages; i++) {
@@ -49,7 +49,7 @@ export default function Pagination({
         {pageNumbers.map((page) => (
           <button
             key={page}
-            className={`btn-pagination ${currentPage === page ? 'active' : ''}`}
+            className={`btn-pagination ${currentPage === page ? "active" : ""}`}
             onClick={() => onPageClick && onPageClick(page)}
           >
             {page}
@@ -63,9 +63,7 @@ export default function Pagination({
         aria-label="下一页"
       >
         下一頁 ›
-
       </button>
     </nav>
   );
 }
-
